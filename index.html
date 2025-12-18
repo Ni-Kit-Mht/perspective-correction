@@ -1,96 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Basic -->
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- Title (VERY IMPORTANT) -->
-  <title>
-    Document Perspective Correction Tool | Fix Skewed Scans Online (Free)
-  </title>
-
-  <!-- Meta Description -->
-  <meta
-    name="description"
-    content="Free online document perspective correction tool. Fix skewed images using 4-point selection, preserve original image quality, crop accurately, revert changes, and download high-quality corrected documents."
-  />
-
-  <!-- Keywords (minor ranking factor, still useful) -->
-  <meta
-    name="keywords"
-    content="perspective correction, document scanner, fix skewed document, image perspective transform, crop document, rectify image, scan correction online"
-  />
-
-  <!-- Author -->
-  <meta name="author" content="Advanced Perspective Correction Tool">
-
-  <!-- Canonical URL (VERY IMPORTANT for GitHub Pages) -->
-  <link
-    rel="canonical"
-    href="https://ni-kit-mht.github.io/perspective-correction/"
-  />
-
-  <!-- Favicon -->
-  <link rel="icon" href="/perspective-correction/favicon.ico" type="image/x-icon">
-
-  <!-- Open Graph (Social + SEO Boost) -->
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Document Perspective Correction Tool – Fix Skewed Scans">
-  <meta
-    property="og:description"
-    content="Correct document perspective using 4-point selection. Preserve image quality, crop accurately, revert changes, and download high-quality results."
-  >
-  <meta
-    property="og:url"
-    content="https://ni-kit-mht.github.io/perspective-correction/"
-  >
-  <meta
-    property="og:image"
-    content="https://ni-kit-mht.github.io/perspective-correction/preview.png"
-  >
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Document Perspective Correction Tool">
-  <meta
-    name="twitter:description"
-    content="Fix skewed document images online using precise 4-point perspective correction."
-  >
-  <meta
-    name="twitter:image"
-    content="https://ni-kit-mht.github.io/perspective-correction/preview.png"
-  >
-
-  <!-- Search Engine Crawling -->
-  <meta name="robots" content="index, follow">
-
-  <!-- Structured Data (VERY IMPORTANT for Tool Sites) -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "Advanced Perspective Correction Tool",
-    "url": "https://ni-kit-mht.github.io/perspective-correction/",
-    "description": "Online document perspective correction tool that rectifies skewed images using 4-point selection while preserving original image quality.",
-    "applicationCategory": "PhotoEditingApplication",
-    "operatingSystem": "Web",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    }
-  }
-  </script>
-
-  <!-- Styles -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-  >
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Perspective Correction Tool</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
     <div class="container">
         <header>
@@ -136,6 +52,10 @@
                     <button class="btn" id="transformBtn">
                         <i class="fas fa-sync-alt"></i> Apply Perspective Correction
                     </button>
+                    <!-- Add this button in index.html after the download button -->
+                    <button class="btn btn-print" id="printBtn" disabled>
+                        <i class="fas fa-print"></i> Print Corrected Document
+                    </button>
                     <button class="btn btn-download" id="downloadBtn" disabled>
                         <i class="fas fa-download"></i> Download Corrected Image
                     </button>
@@ -177,7 +97,4 @@
 
     <script type="module" src="script.js"></script>
 </body>
-
 </html>
-
-

@@ -4,7 +4,7 @@ import { mapPointUsingMVC } from './mvc.js';
 import { downloadCorrectedImage } from './download.js';
 import { applySimplePerspective as applySimple} from './simplePerspectiveApply.js';
 import { applyComplexPerspective as applyComplex} from './complexPerspectiveApply.js';
-
+import { printCorrectedDocument } from './printCorrectedDocument.js';
 // DOM Elements
 const imageInput = document.getElementById('imageInput');
 const fileUpload = document.getElementById('fileUpload');
@@ -18,7 +18,8 @@ const transformBtn = document.getElementById('transformBtn');
 const downloadBtn = document.getElementById('downloadBtn');
 const resetBtn = document.getElementById('resetBtn');
 const statusMessage = document.getElementById('statusMessage');
-
+// Add to DOM Elements section
+const printBtn = document.getElementById('printBtn');
 // Canvas contexts
 const sourceCtx = sourceCanvas.getContext('2d');
 const pointsCtx = pointsCanvas.getContext('2d');
@@ -35,6 +36,7 @@ let displayScale = 1; // Scale factor between display and actual image
 
 // Initialize
 function init() {
+    printBtn.addEventListener('click', () => printCorrectedDocument({ transformedImageData, statusMessage }));
     fileUpload.addEventListener('click', () => imageInput.click());
     imageInput.addEventListener('change', handleImageUpload);
     
@@ -336,7 +338,7 @@ function applyPerspectiveCorrection() {
         } else {
             applyComplexPerspective(orderedPoints);
         }
-        
+        printBtn.disabled = false;
     } catch (error) {
         console.error("Perspective correction error:", error);
         statusMessage.textContent = `Error: ${error.message || 'Please try adjusting your points.'}`;
@@ -371,7 +373,8 @@ function resetAllPoints() {
     
     pointsCanvas.style.pointerEvents = 'all';
     downloadBtn.disabled = true;
-    
+    printBtn.disabled = true;
+
     updatePointCount();
     drawPoints();
     

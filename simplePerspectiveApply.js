@@ -1,5 +1,4 @@
 import { PerspectiveTransform } from './perspectiveTransform.js';
-import { mapPointUsingMVC } from './mvc.js';
 
 export function applySimplePerspective(orderedPoints, { sourceCtx, pointsCanvas, downloadBtn, statusMessage }) {
     // Calculate bounding box

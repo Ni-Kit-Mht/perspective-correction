@@ -276,3 +276,13 @@ footer {
         min-width: 100%;
     }
 }
+
+.btn-print {
+    background: linear-gradient(to right, #5c7cfa, #4c6ef5);
+    color: white;
+}
+
+.btn-print:hover {
+    background: linear-gradient(to right, #4c6ef5, #3b5bdb);
+    transform: translateY(-2px);
+}

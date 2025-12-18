@@ -1,100 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Perspective Correction Tool</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1><i class="fas fa-crop-alt"></i> Advanced Perspective Correction</h1>
-            <p class="subtitle">Select 4+ points on an image to correct perspective distortion. Transform the image and download the corrected result with preserved resolution.</p>
-        </header>
-        
-        <div class="main-content">
-            <div class="left-panel">
-                <h2 class="panel-title">Controls</h2>
-                
-                <div class="control-group">
-                    <div class="control-label">Upload Image</div>
-                    <div class="file-upload" id="fileUpload">
-                        <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
-                        <p>Click to upload an image or drag and drop</p>
-                        <p style="font-size: 0.9rem; margin-top: 5px; color: #a5d8ff;">Supported formats: JPG, PNG, WebP</p>
-                        <input type="file" id="imageInput" accept="image/*" style="display: none;">
-                    </div>
-                </div>
-                
-                <div class="control-group">
-                    <div class="control-label">Point Selection Mode</div>
-                    <div class="point-controls">
-                        <div class="point-btn active" id="addPointsBtn">
-                            <i class="fas fa-plus-circle"></i> Add Points
-                        </div>
-                        <div class="point-btn" id="movePointsBtn">
-                            <i class="fas fa-arrows-alt"></i> Move Points
-                        </div>
-                        <div class="point-btn" id="deletePointsBtn">
-                            <i class="fas fa-trash-alt"></i> Delete Points
-                        </div>
-                    </div>
-                    
-                    <div class="point-counter">
-                        <span>Points Selected: <strong id="pointCount">0</strong></span>
-                        <span>Min: 4 points required</span>
-                    </div>
-                </div>
-                
-                <div class="control-group">
-                    <button class="btn" id="transformBtn">
-                        <i class="fas fa-sync-alt"></i> Apply Perspective Correction
-                    </button>
-                    <!-- Add this button in index.html after the download button -->
-                    <button class="btn btn-print" id="printBtn" disabled>
-                        <i class="fas fa-print"></i> Print Corrected Document
-                    </button>
-                    <button class="btn btn-download" id="downloadBtn" disabled>
-                        <i class="fas fa-download"></i> Download Corrected Image
-                    </button>
-                    <button class="btn btn-reset" id="resetBtn">
-                        <i class="fas fa-redo"></i> Reset All Points
-                    </button>
-                </div>
-                
-                <div class="status" id="statusMessage">
-                    Upload an image to begin perspective correction
-                </div>
-                
-                <div class="instructions">
-                    <h3>How to use:</h3>
-                    <ul>
-                        <li>Upload an image using the upload area</li>
-                        <li>Click "Add Points" and select 4+ points on the image to define the area to correct</li>
-                        <li>Use "Move Points" to drag and adjust point positions</li>
-                        <li>Use "Delete Points" to remove unwanted points</li>
-                        <li>Click "Apply Perspective Correction" to transform the image</li>
-                        <li>Download the corrected image with preserved resolution</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="image-container">
-                <h2 class="panel-title">Image Editor</h2>
-                <div class="canvas-wrapper">
-                    <canvas id="sourceCanvas"></canvas>
-                    <canvas id="pointsCanvas"></canvas>
-                </div>
-            </div>
-        </div>
-        
-        <footer>
-            <p>Perspective Correction Tool | Images are processed locally in your browser</p>
-        </footer>
-    </div>
+  <!-- =========================
+       BASIC META
+  ========================== -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script type="module" src="script.js"></script>
+  <!-- =========================
+       PRIMARY SEO
+  ========================== -->
+  <title>
+    Document Perspective Correction Tool | Fix Skewed Scans Online (Free)
+  </title>
+
+  <meta
+    name="description"
+    content="Free online document perspective correction tool. Fix skewed or distorted document images using 4-point selection, preserve original resolution, crop accurately, revert changes, and download high-quality corrected images."
+  >
+
+  <meta
+    name="keywords"
+    content="document perspective correction, fix skewed document, image perspective transform, scan correction online, crop document image, rectify scanned documents"
+  >
+
+  <meta name="author" content="Advanced Perspective Correction Tool">
+  <meta name="robots" content="index, follow">
+
+  <!-- =========================
+       CANONICAL (IMPORTANT FOR GITHUB PAGES)
+  ========================== -->
+  <link
+    rel="canonical"
+    href="https://ni-kit-mht.github.io/perspective-correction/"
+  >
+
+  <!-- =========================
+       FAVICON
+  ========================== -->
+  <link rel="icon" href="/perspective-correction/favicon.ico" type="image/x-icon">
+
+  <!-- =========================
+       OPEN GRAPH (SOCIAL SEO)
+  ========================== -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Document Perspective Correction Tool – Fix Skewed Scans">
+  <meta
+    property="og:description"
+    content="Correct document perspective using 4-point selection. Preserve image quality, crop accurately, revert changes, and download high-quality results."
+  >
+  <meta
+    property="og:url"
+    content="https://ni-kit-mht.github.io/perspective-correction/"
+  >
+  <meta
+    property="og:image"
+    content="https://ni-kit-mht.github.io/perspective-correction/preview.png"
+  >
+
+  <!-- =========================
+       TWITTER CARD
+  ========================== -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Document Perspective Correction Tool">
+  <meta
+    name="twitter:description"
+    content="Fix skewed document images online using precise 4-point perspective correction."
+  >
+  <meta
+    name="twitter:image"
+    content="https://ni-kit-mht.github.io/perspective-correction/preview.png"
+  >
+
+  <!-- =========================
+       STRUCTURED DATA (VERY IMPORTANT)
+  ========================== -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Advanced Perspective Correction Tool",
+    "url": "https://ni-kit-mht.github.io/perspective-correction/",
+    "description": "Online document perspective correction tool that rectifies skewed or distorted images using 4-point selection while preserving original image quality.",
+    "applicationCategory": "PhotoEditingApplication",
+    "operatingSystem": "Web",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <!-- =========================
+       STYLES
+  ========================== -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- =========================
+         HEADER (H1 IS CRITICAL)
+    ========================== -->
+    <header>
+      <h1>
+        <i class="fas fa-crop-alt"></i>
+        Document Perspective Correction Tool
+      </h1>
+      <p class="subtitle">
+        Fix skewed or distorted document images using precise 4-point perspective correction.
+        Preserve original resolution, crop unnecessary regions, revert changes, and download
+        high-quality corrected results — all directly in your browser.
+      </p>
+    </header>
+
+    <main class="main-content">
+      <section class="left-panel">
+        <h2 class="panel-title">Controls</h2>
+
+        <div class="control-group">
+          <div class="control-label">Upload Image</div>
+          <div class="file-upload" id="fileUpload">
+            <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
+            <p>Click to upload an image or drag and drop</p>
+            <p style="font-size: 0.9rem; margin-top: 5px; color: #a5d8ff;">
+              Supported formats: JPG, PNG, WebP
+            </p>
+            <input type="file" id="imageInput" accept="image/*" hidden>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">Point Selection Mode</div>
+
+          <div class="point-controls">
+            <div class="point-btn active" id="addPointsBtn">
+              <i class="fas fa-plus-circle"></i> Add Points
+            </div>
+            <div class="point-btn" id="movePointsBtn">
+              <i class="fas fa-arrows-alt"></i> Move Points
+            </div>
+            <div class="point-btn" id="deletePointsBtn">
+              <i class="fas fa-trash-alt"></i> Delete Points
+            </div>
+          </div>
+
+          <div class="point-counter">
+            <span>Points Selected: <strong id="pointCount">0</strong></span>
+            <span>Minimum: 4 points required</span>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <button class="btn" id="transformBtn">
+            <i class="fas fa-sync-alt"></i> Apply Perspective Correction
+          </button>
+
+          <button class="btn btn-print" id="printBtn" disabled>
+            <i class="fas fa-print"></i> Print Corrected Document
+          </button>
+
+          <button class="btn btn-download" id="downloadBtn" disabled>
+            <i class="fas fa-download"></i> Download Corrected Image
+          </button>
+
+          <button class="btn btn-reset" id="resetBtn">
+            <i class="fas fa-redo"></i> Reset All Points
+          </button>
+        </div>
+
+        <div class="status" id="statusMessage">
+          Upload an image to begin perspective correction
+        </div>
+
+        <!-- =========================
+             SEO CONTENT (VERY IMPORTANT)
+        ========================== -->
+        <div class="instructions">
+          <h2>How to Correct Document Perspective</h2>
+          <ul>
+            <li>Upload a document or photo taken at an angle</li>
+            <li>Select at least 4 points around the document edges</li>
+            <li>Adjust points precisely using move mode</li>
+            <li>Apply perspective correction to generate a rectangular document</li>
+            <li>Download or print the corrected high-resolution image</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="image-container">
+        <h2 class="panel-title">Image Editor</h2>
+        <div class="canvas-wrapper">
+          <canvas id="sourceCanvas"></canvas>
+          <canvas id="pointsCanvas"></canvas>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        © 2025 Perspective Correction Tool —
+        All image processing happens locally in your browser. No uploads.
+      </p>
+    </footer>
+
+  </div>
+
+  <script type="module" src="script.js"></script>
 </body>
 </html>

@@ -1,80 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- =========================
-       BASIC META
-  ========================== -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- =========================
-       PRIMARY SEO
-  ========================== -->
-  <title>
-    Document Perspective Correction Tool | Fix Skewed Scans Online (Free)
-  </title>
-
-  <meta
-    name="description"
-    content="Free online document perspective correction tool. Fix skewed or distorted document images using 4-point selection, preserve original resolution, crop accurately, revert changes, and download high-quality corrected images."
-  >
-
-  <meta
-    name="keywords"
-    content="document perspective correction, fix skewed document, image perspective transform, scan correction online, crop document image, rectify scanned documents"
-  >
-
+  <title>Document Perspective Correction Tool | Fix Skewed Scans Online (Free)</title>
+  
+  <meta name="description" content="Free online document perspective correction tool. Fix skewed or distorted document images using 4-point selection, preserve original resolution, crop accurately, revert changes, and download high-quality corrected images.">
+  <meta name="keywords" content="document perspective correction, fix skewed document, image perspective transform, scan correction online, crop document image, rectify scanned documents">
   <meta name="author" content="Advanced Perspective Correction Tool">
   <meta name="robots" content="index, follow">
-
-  <!-- =========================
-       CANONICAL (IMPORTANT FOR GITHUB PAGES)
-  ========================== -->
-  <link
-    rel="canonical"
-    href="https://ni-kit-mht.github.io/perspective-correction/"
-  >
-
-  <!-- =========================
-       FAVICON
-  ========================== -->
+  
+  <link rel="canonical" href="https://ni-kit-mht.github.io/perspective-correction/">
   <link rel="icon" href="/perspective-correction/favicon.ico" type="image/x-icon">
-
-  <!-- =========================
-       OPEN GRAPH (SOCIAL SEO)
-  ========================== -->
+  
   <meta property="og:type" content="website">
   <meta property="og:title" content="Document Perspective Correction Tool – Fix Skewed Scans">
-  <meta
-    property="og:description"
-    content="Correct document perspective using 4-point selection. Preserve image quality, crop accurately, revert changes, and download high-quality results."
-  >
-  <meta
-    property="og:url"
-    content="https://ni-kit-mht.github.io/perspective-correction/"
-  >
-  <meta
-    property="og:image"
-    content="https://ni-kit-mht.github.io/perspective-correction/preview.png"
-  >
-
-  <!-- =========================
-       TWITTER CARD
-  ========================== -->
+  <meta property="og:description" content="Correct document perspective using 4-point selection. Preserve image quality, crop accurately, revert changes, and download high-quality results.">
+  <meta property="og:url" content="https://ni-kit-mht.github.io/perspective-correction/">
+  <meta property="og:image" content="https://ni-kit-mht.github.io/perspective-correction/preview.png">
+  
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Document Perspective Correction Tool">
-  <meta
-    name="twitter:description"
-    content="Fix skewed document images online using precise 4-point perspective correction."
-  >
-  <meta
-    name="twitter:image"
-    content="https://ni-kit-mht.github.io/perspective-correction/preview.png"
-  >
-
-  <!-- =========================
-       STRUCTURED DATA (VERY IMPORTANT)
-  ========================== -->
+  <meta name="twitter:description" content="Fix skewed document images online using precise 4-point perspective correction.">
+  <meta name="twitter:image" content="https://ni-kit-mht.github.io/perspective-correction/preview.png">
+  
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -93,63 +42,54 @@
   </script>
 
   <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "What is document perspective correction?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Document perspective correction fixes skewed or angled images by transforming them into a rectangular, front-facing view."
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is document perspective correction?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Document perspective correction fixes skewed or angled images by transforming them into a rectangular, front-facing view."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does this perspective correction tool work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You select at least four points around the document edges and the tool applies a perspective transformation locally in the browser."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is my image uploaded to a server?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. All processing happens locally in your browser and images are never uploaded."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does this tool reduce image quality?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. The original image resolution is preserved during perspective correction."
+        }
       }
-    },
-    {
-      "@type": "Question",
-      "name": "How does this perspective correction tool work?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "You select at least four points around the document edges and the tool applies a perspective transformation locally in the browser."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Is my image uploaded to a server?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "No. All processing happens locally in your browser and images are never uploaded."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Does this tool reduce image quality?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "No. The original image resolution is preserved during perspective correction."
-      }
-    }
-  ]
-}
-</script>
+    ]
+  }
+  </script>
 
-
-  <!-- =========================
-       STYLES
-  ========================== -->
   <link rel="preconnect" href="https://cdnjs.cloudflare.com">
   <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
   <div class="container">
-
-    <!-- =========================
-         HEADER (H1 IS CRITICAL)
-    ========================== -->
     <header>
       <h1>
         <i class="fas fa-crop-alt"></i>
@@ -163,6 +103,7 @@
     </header>
 
     <main class="main-content">
+      <!-- LEFT PANEL: Controls -->
       <section class="left-panel">
         <h2 class="panel-title">Controls</h2>
 
@@ -220,19 +161,19 @@
         <div class="status" id="statusMessage">
           Upload an image to begin perspective correction
         </div>
+      </section>
 
+      <!-- MIDDLE PANEL: Image Editor -->
       <section class="image-container">
         <h2 class="panel-title">Image Editor</h2>
         <div class="canvas-wrapper">
           <canvas id="sourceCanvas"></canvas>
           <canvas id="pointsCanvas"></canvas>
         </div>
-
-    <div>
       </section>
-              <!-- =========================
-             SEO CONTENT (VERY IMPORTANT)
-        ========================== -->
+
+      <!-- RIGHT PANEL: Instructions & FAQ -->
+      <section class="left-panel">
         <div class="instructions">
           <h2>How to Correct Document Perspective</h2>
           <ul>
@@ -243,53 +184,53 @@
             <li>Download or print the corrected high-resolution image</li>
           </ul>
         </div>
+
+        <section class="faq">
+          <h2>Frequently Asked Questions</h2>
+        
+          <details>
+            <summary>What is document perspective correction?</summary>
+            <p>
+              Document perspective correction fixes skewed or angled images by transforming
+              them into a rectangular, front-facing view. This is commonly used for scanned
+              documents, receipts, whiteboards, and photographed papers.
+            </p>
+          </details>
+        
+          <details>
+            <summary>How does this perspective correction tool work?</summary>
+            <p>
+              You select at least four points around the document edges. The tool calculates
+              a perspective transformation that rectifies the image while preserving its
+              original resolution and image quality.
+            </p>
+          </details>
+        
+          <details>
+            <summary>Is my image uploaded to a server?</summary>
+            <p>
+              No. All image processing happens locally in your browser. Your documents are
+              never uploaded, stored, or shared.
+            </p>
+          </details>
+        
+          <details>
+            <summary>Does this tool reduce image quality?</summary>
+            <p>
+              No. The tool preserves the original image resolution and only removes
+              unnecessary areas outside the selected region.
+            </p>
+          </details>
+        
+          <details>
+            <summary>Can I download or print the corrected document?</summary>
+            <p>
+              Yes. After perspective correction, you can download a high-quality image
+              or print the corrected document directly from the browser.
+            </p>
+          </details>
+        </section>
       </section>
-      <section class="faq">
-        <h2>Frequently Asked Questions</h2>
-      
-        <details>
-          <summary>What is document perspective correction?</summary>
-          <p>
-            Document perspective correction fixes skewed or angled images by transforming
-            them into a rectangular, front-facing view. This is commonly used for scanned
-            documents, receipts, whiteboards, and photographed papers.
-          </p>
-        </details>
-      
-        <details>
-          <summary>How does this perspective correction tool work?</summary>
-          <p>
-            You select at least four points around the document edges. The tool calculates
-            a perspective transformation that rectifies the image while preserving its
-            original resolution and image quality.
-          </p>
-        </details>
-      
-        <details>
-          <summary>Is my image uploaded to a server?</summary>
-          <p>
-            No. All image processing happens locally in your browser. Your documents are
-            never uploaded, stored, or shared.
-          </p>
-        </details>
-      
-        <details>
-          <summary>Does this tool reduce image quality?</summary>
-          <p>
-            No. The tool preserves the original image resolution and only removes
-            unnecessary areas outside the selected region.
-          </p>
-        </details>
-      
-        <details>
-          <summary>Can I download or print the corrected document?</summary>
-          <p>
-            Yes. After perspective correction, you can download a high-quality image
-            or print the corrected document directly from the browser.
-          </p>
-        </details>
-      </section>
-    </div>
     </main>
 
     <footer>
@@ -298,7 +239,6 @@
         All image processing happens locally in your browser. No uploads.
       </p>
     </footer>
-
   </div>
 
   <script type="module" src="script.js"></script>

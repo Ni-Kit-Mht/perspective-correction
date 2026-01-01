@@ -133,6 +133,14 @@ h1 {
     transform: none;
 }
 
+.btn-grid {
+    background: linear-gradient(to right, #667eea, #764ba2);
+}
+
+.btn-grid:hover:not(:disabled) {
+    background: linear-gradient(to right, #764ba2, #667eea);
+}
+
 .btn-download {
     background: linear-gradient(to right, #40c057, #2f9e44);
 }
@@ -169,10 +177,17 @@ canvas {
 
 #sourceCanvas {
     z-index: 1;
+    pointer-events: none;
+}
+
+#gridCanvas {
+    z-index: 2;
+    pointer-events: none;
 }
 
 #pointsCanvas {
-    z-index: 2;
+    z-index: 3;
+    pointer-events: all;
 }
 
 .instructions {

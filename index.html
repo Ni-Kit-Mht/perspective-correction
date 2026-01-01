@@ -141,7 +141,7 @@
         </div>
 
         <div class="control-group">
-          <button class="btn btn-grid" id="toggleGridBtn" disabled>
+          <button class="btn btn-grid" id="toggleGridBtn" enabled>
             <i class="fas fa-th"></i> Toggle Grid Overlay
           </button>
 
@@ -172,6 +172,7 @@
         <h2 class="panel-title">Image Editor</h2>
         <div class="canvas-wrapper">
           <canvas id="sourceCanvas"></canvas>
+          <canvas id="gridCanvas"></canvas>
           <canvas id="pointsCanvas"></canvas>
         </div>
       </section>
@@ -247,102 +248,67 @@
   </div>
 
   <script type="module">
-    // Global state for grid
-    let gridEnabled = false;
-    let gridCanvas = null;
-    let gridCtx = null;
-    let currentImage = null;
+    // Grid state management
+    window.gridState = {
+      enabled: false,
+      canvas: null,
+      ctx: null
+    };
 
-    // Clipboard paste functionality
-    document.addEventListener('paste', function(e) {
-      const items = e.clipboardData?.items;
-      if (!items) return;
-
-      for (let i = 0; i < items.length; i++) {
-        if (items[i].type.indexOf('image') !== -1) {
-          e.preventDefault();
-          const blob = items[i].getAsFile();
-          const reader = new FileReader();
-          reader.onload = function(event) {
-            const imageInput = document.getElementById('imageInput');
-            // Create a new File object from the blob
-            const file = new File([blob], 'pasted-image.png', { type: blob.type });
-            // Create a DataTransfer object to simulate file input
-            const dataTransfer = new DataTransfer();
-            dataTransfer.items.add(file);
-            imageInput.files = dataTransfer.files;
-            // Trigger change event
-            const changeEvent = new Event('change', { bubbles: true });
-            imageInput.dispatchEvent(changeEvent);
-          };
-          reader.readAsDataURL(blob);
-          break;
+    // Export grid functions for use by script.js
+    window.drawGrid = function(sourceCanvas, displayScale) {
+      const gridCanvas = window.gridState.canvas;
+      const gridCtx = window.gridState.ctx;
+      
+      if (!gridCanvas || !gridCtx || !window.gridState.enabled) {
+        if (gridCanvas && gridCtx) {
+          gridCtx.clearRect(0, 0, gridCanvas.width, gridCanvas.height);
         }
+        return;
       }
-    });
 
-    // Initialize grid canvas when image is loaded
-    function initGridCanvas() {
-      const canvasWrapper = document.querySelector('.canvas-wrapper');
-      const sourceCanvas = document.getElementById('sourceCanvas');
-      
-      if (!gridCanvas) {
-        gridCanvas = document.createElement('canvas');
-        gridCanvas.id = 'gridCanvas';
-        gridCanvas.style.position = 'absolute';
-        gridCanvas.style.top = '0';
-        gridCanvas.style.left = '0';
-        gridCanvas.style.pointerEvents = 'none';
-        canvasWrapper.appendChild(gridCanvas);
-        gridCtx = gridCanvas.getContext('2d');
+      // Match source canvas dimensions
+      if (gridCanvas.width !== sourceCanvas.width || gridCanvas.height !== sourceCanvas.height) {
+        gridCanvas.width = sourceCanvas.width;
+        gridCanvas.height = sourceCanvas.height;
+        
+        // Match display styling
+        gridCanvas.style.width = sourceCanvas.style.width;
+        gridCanvas.style.height = sourceCanvas.style.height;
+        gridCanvas.style.left = sourceCanvas.style.left;
+        gridCanvas.style.top = sourceCanvas.style.top;
       }
-      
-      gridCanvas.width = sourceCanvas.width;
-      gridCanvas.height = sourceCanvas.height;
-      
-      // Enable grid button
-      document.getElementById('toggleGridBtn').disabled = false;
-    }
 
-    // Calculate average brightness of the image
-    function getAverageBrightness(canvas) {
-      const ctx = canvas.getContext('2d');
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      gridCtx.clearRect(0, 0, gridCanvas.width, gridCanvas.height);
+
+      // Calculate average brightness
+      const sourceCtx = sourceCanvas.getContext('2d');
+      const imageData = sourceCtx.getImageData(0, 0, sourceCanvas.width, sourceCanvas.height);
       const data = imageData.data;
       let totalBrightness = 0;
+      let sampleCount = 0;
       
-      // Sample every 10th pixel for performance
-      for (let i = 0; i < data.length; i += 40) {
+      // Sample every 100th pixel for performance
+      for (let i = 0; i < data.length; i += 400) {
         const r = data[i];
         const g = data[i + 1];
         const b = data[i + 2];
-        // Calculate perceived brightness
         const brightness = (0.299 * r + 0.587 * g + 0.114 * b);
         totalBrightness += brightness;
+        sampleCount++;
       }
       
-      return totalBrightness / (data.length / 40);
-    }
-
-    // Draw grid overlay
-    function drawGrid() {
-      if (!gridCanvas || !gridCtx) return;
-      
-      gridCtx.clearRect(0, 0, gridCanvas.width, gridCanvas.height);
-      
-      if (!gridEnabled) return;
-      
-      const sourceCanvas = document.getElementById('sourceCanvas');
-      const brightness = getAverageBrightness(sourceCanvas);
+      const avgBrightness = totalBrightness / sampleCount;
       
       // Use white grid for dark images, black grid for light images
-      const gridColor = brightness < 128 ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)';
+      const gridColor = avgBrightness < 128 ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)';
       
-      const gridSize = 30; // Grid cell size in pixels
+      // Grid cell size scaled to actual canvas resolution
+      const gridSize = 30 * displayScale;
       
       gridCtx.strokeStyle = gridColor;
-      gridCtx.lineWidth = 1;
-      gridCtx.setLineDash([5, 5]);
+      gridCtx.lineWidth = 1 * displayScale;
+      gridCtx.setLineDash([5 * displayScale, 5 * displayScale]);
       
       // Draw vertical lines
       for (let x = 0; x < gridCanvas.width; x += gridSize) {
@@ -361,51 +327,61 @@
       }
       
       gridCtx.setLineDash([]);
-    }
+    };
+
+    window.initGrid = function() {
+      const gridCanvas = document.getElementById('gridCanvas');
+      if (gridCanvas) {
+        window.gridState.canvas = gridCanvas;
+        window.gridState.ctx = gridCanvas.getContext('2d');
+        document.getElementById('toggleGridBtn').disabled = false;
+      }
+    };
+
+    // Clipboard paste functionality
+    document.addEventListener('paste', function(e) {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('image') !== -1) {
+          e.preventDefault();
+          const blob = items[i].getAsFile();
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            const imageInput = document.getElementById('imageInput');
+            const file = new File([blob], 'pasted-image.png', { type: blob.type });
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            imageInput.files = dataTransfer.files;
+            const changeEvent = new Event('change', { bubbles: true });
+            imageInput.dispatchEvent(changeEvent);
+          };
+          reader.readAsDataURL(blob);
+          break;
+        }
+      }
+    });
 
     // Toggle grid button handler
     document.getElementById('toggleGridBtn').addEventListener('click', function() {
-      gridEnabled = !gridEnabled;
-      drawGrid();
+      window.gridState.enabled = !window.gridState.enabled;
       
       // Update button state
-      if (gridEnabled) {
+      if (window.gridState.enabled) {
         this.style.background = '#28a745';
         this.innerHTML = '<i class="fas fa-th"></i> Hide Grid Overlay';
       } else {
-        this.style.background = '#667eea';
+        this.style.background = '';
         this.innerHTML = '<i class="fas fa-th"></i> Toggle Grid Overlay';
       }
-    });
 
-    // Listen for image load events from the main script
-    // We'll use a MutationObserver to detect when the canvas changes
-    const sourceCanvas = document.getElementById('sourceCanvas');
-    const observer = new MutationObserver(function() {
-      const ctx = sourceCanvas.getContext('2d');
-      // Check if canvas has content
-      const imageData = ctx.getImageData(0, 0, sourceCanvas.width, sourceCanvas.height);
-      const hasContent = imageData.data.some(channel => channel !== 0);
-      
-      if (hasContent && sourceCanvas.width > 0 && sourceCanvas.height > 0) {
-        initGridCanvas();
-        if (gridEnabled) {
-          drawGrid();
-        }
+      // Trigger redraw if canvas exists
+      const sourceCanvas = document.getElementById('sourceCanvas');
+      if (sourceCanvas && window.currentDisplayScale) {
+        window.drawGrid(sourceCanvas, window.currentDisplayScale);
       }
     });
-
-    // Observe canvas size changes
-    const resizeObserver = new ResizeObserver(function() {
-      if (sourceCanvas.width > 0 && sourceCanvas.height > 0) {
-        initGridCanvas();
-        if (gridEnabled) {
-          drawGrid();
-        }
-      }
-    });
-
-    resizeObserver.observe(sourceCanvas);
   </script>
   <script type="module" src="script.js"></script>
 </body>

@@ -5,6 +5,7 @@ import { downloadCorrectedImage } from './download.js';
 import { applySimplePerspective as applySimple} from './simplePerspectiveApply.js';
 import { applyComplexPerspective as applyComplex} from './complexPerspectiveApply.js';
 import { printCorrectedDocument } from './printCorrectedDocument.js';
+
 // DOM Elements
 const imageInput = document.getElementById('imageInput');
 const fileUpload = document.getElementById('fileUpload');
@@ -18,8 +19,8 @@ const transformBtn = document.getElementById('transformBtn');
 const downloadBtn = document.getElementById('downloadBtn');
 const resetBtn = document.getElementById('resetBtn');
 const statusMessage = document.getElementById('statusMessage');
-// Add to DOM Elements section
 const printBtn = document.getElementById('printBtn');
+
 // Canvas contexts
 const sourceCtx = sourceCanvas.getContext('2d');
 const pointsCtx = pointsCanvas.getContext('2d');
@@ -54,6 +55,12 @@ function init() {
     pointsCanvas.addEventListener('mouseleave', handleCanvasMouseUp);
     
     setMode('add');
+    
+    // Initialize grid
+    if (typeof window.initGrid === 'function') {
+        window.initGrid();
+    }
+    
     loadSampleImage();
 }
 
@@ -144,6 +151,9 @@ function setupCanvas() {
     // Calculate scale factor between display and actual canvas
     displayScale = imageWidth / displayWidth;
     
+    // Store displayScale globally for grid function
+    window.currentDisplayScale = displayScale;
+    
     // Set CSS display size (visual size in browser)
     sourceCanvas.style.width = displayWidth + 'px';
     sourceCanvas.style.height = displayHeight + 'px';
@@ -167,6 +177,11 @@ function setupCanvas() {
     selectedPointIndex = -1;
     updatePointCount();
     drawPoints();
+    
+    // Draw grid if enabled
+    if (typeof window.drawGrid === 'function') {
+        window.drawGrid(sourceCanvas, displayScale);
+    }
     
     console.log(`Canvas Resolution: ${imageWidth}×${imageHeight}, Display: ${displayWidth.toFixed(0)}×${displayHeight.toFixed(0)}, Scale: ${displayScale.toFixed(2)}x`);
 }
@@ -339,6 +354,11 @@ function applyPerspectiveCorrection() {
             applyComplexPerspective(orderedPoints);
         }
         printBtn.disabled = false;
+        
+        // Redraw grid after transformation
+        if (typeof window.drawGrid === 'function') {
+            window.drawGrid(sourceCanvas, displayScale);
+        }
     } catch (error) {
         console.error("Perspective correction error:", error);
         statusMessage.textContent = `Error: ${error.message || 'Please try adjusting your points.'}`;
@@ -377,6 +397,11 @@ function resetAllPoints() {
 
     updatePointCount();
     drawPoints();
+    
+    // Redraw grid after reset
+    if (typeof window.drawGrid === 'function') {
+        window.drawGrid(sourceCanvas, displayScale);
+    }
     
     statusMessage.textContent = "All points reset. Select 4+ points to define perspective correction area.";
     statusMessage.className = "status";

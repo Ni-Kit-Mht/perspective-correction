@@ -168,6 +168,26 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: none;
+}
+/* Custom crosshair cursor that inverts colors */
+.canvas-wrapper::before {
+    content: '';
+    position: fixed;
+    left: var(--cursor-x, -100px);
+    top: var(--cursor-y, -100px);
+    width: 20px;
+    height: 20px;
+    border: 2px solid white;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    mix-blend-mode: difference;
+    opacity: 0;
+}
+.canvas-wrapper:hover::before {
+    opacity: 1;
 }
 
 canvas {
@@ -300,4 +320,14 @@ footer {
 .btn-print:hover {
     background: linear-gradient(to right, #4c6ef5, #3b5bdb);
     transform: translateY(-2px);
+}
+
+.faq .instructions p{
+    padding-left: 10px;
+}
+.faq .instructions summary{
+    padding-left: 10px;
+    text-rendering: optimizeLegibility;
+    text-transform: none;
+    text-wrap: contain;
 }

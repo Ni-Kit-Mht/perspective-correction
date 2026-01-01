@@ -35,6 +35,17 @@ let transformedImageData = null;
 let originalImageData = null;
 let displayScale = 1; // Scale factor between display and actual image
 
+const canvasWrapper = document.querySelector('.canvas-wrapper');
+
+canvasWrapper.addEventListener('mousemove', (e) => {
+    const rect = canvasWrapper.getBoundingClientRect();
+    const x = e.clientX;
+    const y = e.clientY;
+    
+    canvasWrapper.style.setProperty('--cursor-x', x + 'px');
+    canvasWrapper.style.setProperty('--cursor-y', y + 'px');
+});
+
 // Initialize
 function init() {
     printBtn.addEventListener('click', () => printCorrectedDocument({ transformedImageData, statusMessage }));

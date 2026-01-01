@@ -242,6 +242,35 @@
     </footer>
   </div>
 
+  <script type="module">
+    // Clipboard paste functionality
+    document.addEventListener('paste', function(e) {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('image') !== -1) {
+          e.preventDefault();
+          const blob = items[i].getAsFile();
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            const imageInput = document.getElementById('imageInput');
+            // Create a new File object from the blob
+            const file = new File([blob], 'pasted-image.png', { type: blob.type });
+            // Create a DataTransfer object to simulate file input
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            imageInput.files = dataTransfer.files;
+            // Trigger change event
+            const changeEvent = new Event('change', { bubbles: true });
+            imageInput.dispatchEvent(changeEvent);
+          };
+          reader.readAsDataURL(blob);
+          break;
+        }
+      }
+    });
+  </script>
   <script type="module" src="script.js"></script>
 </body>
 </html>

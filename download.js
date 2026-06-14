@@ -2,6 +2,8 @@ export function downloadCorrectedImage({
     transformedImageData,
     statusMessage
 }) {
+    const imgData = window.currentImageData;
+
     if (!transformedImageData || !transformedImageData.canvas) {
         statusMessage.textContent = "No corrected image available. Please apply perspective correction first.";
         statusMessage.className = "status error";

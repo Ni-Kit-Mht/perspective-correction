@@ -25,6 +25,86 @@ const printBtn = document.getElementById('printBtn');
 const sourceCtx = sourceCanvas.getContext('2d');
 const pointsCtx = pointsCanvas.getContext('2d');
 
+// Add this function to your existing code (replace the existing resizeCanvases function)
+function resizeCanvases() {
+    const wrapper = document.querySelector('.canvas-wrapper');
+    if (!wrapper || !image) return;
+    
+    // Get wrapper dimensions
+    const rect = wrapper.getBoundingClientRect();
+    const containerWidth = rect.width;
+    const containerHeight = rect.height;
+    
+    // Get original image dimensions
+    const imageWidth = image.naturalWidth || image.width;
+    const imageHeight = image.naturalHeight || image.height;
+    
+    // Calculate new display size
+    const imageAspectRatio = imageWidth / imageHeight;
+    let displayWidth, displayHeight;
+    
+    if (containerWidth / containerHeight > imageAspectRatio) {
+        displayHeight = containerHeight;
+        displayWidth = displayHeight * imageAspectRatio;
+    } else {
+        displayWidth = containerWidth;
+        displayHeight = displayWidth / imageAspectRatio;
+    }
+    
+    // Update display scale
+    displayScale = imageWidth / displayWidth;
+    window.currentDisplayScale = displayScale;
+    
+    // Update canvas CSS sizes
+    [sourceCanvas, pointsCanvas].forEach(canvas => {
+        if (canvas) {
+            canvas.style.width = displayWidth + 'px';
+            canvas.style.height = displayHeight + 'px';
+        }
+    });
+    
+    // Center canvases
+    const offsetX = (containerWidth - displayWidth) / 2;
+    const offsetY = (containerHeight - displayHeight) / 2;
+    
+    [sourceCanvas, pointsCanvas].forEach(canvas => {
+        if (canvas) {
+            canvas.style.left = offsetX + 'px';
+            canvas.style.top = offsetY + 'px';
+        }
+    });
+    
+    // Redraw content
+    if (sourceCtx && originalImageData) {
+        sourceCtx.putImageData(originalImageData, 0, 0);
+    } else if (sourceCtx && image) {
+        sourceCtx.drawImage(image, 0, 0, imageWidth, imageHeight);
+    }
+    
+    drawPoints();
+    //drawGrid();
+    if (typeof window.drawGrid === 'function') {
+        window.drawGrid(sourceCanvas, displayScale);
+    }
+}
+
+// Add resize listener (minimum code)
+window.addEventListener('resize', () => {
+    if (image) resizeCanvases();
+});
+
+// Also use ResizeObserver for container changes
+const resizeObserver = new ResizeObserver(() => {
+    if (image) resizeCanvases();
+});
+
+// Start observing when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    const wrapper = document.querySelector('.canvas-wrapper');
+    if (wrapper) resizeObserver.observe(wrapper);
+});
+
+
 // State variables
 let image = null;
 let points = [];
@@ -37,39 +117,159 @@ let displayScale = 1; // Scale factor between display and actual image
 
 const canvasWrapper = document.querySelector('.canvas-wrapper');
 
-canvasWrapper.addEventListener('mousemove', (e) => {
-    const rect = canvasWrapper.getBoundingClientRect();
-    const x = e.clientX;
-    const y = e.clientY;
+// Enable print button when image is loaded
+function enablePrintButton() {
+    if (printBtn) {
+        printBtn.disabled = false;
+        printBtn.style.opacity = '1';
+        printBtn.style.cursor = 'pointer';
+    }
+}
+
+// Disable print button initially
+if (printBtn) {
+    printBtn.disabled = true;
+    printBtn.style.opacity = '0.5';
+    printBtn.style.cursor = 'not-allowed';
+}
+
+if (canvasWrapper) {
+    canvasWrapper.addEventListener('mousemove', (e) => {
+        const rect = canvasWrapper.getBoundingClientRect();
+        const x = e.clientX;
+        const y = e.clientY;
+        
+        canvasWrapper.style.setProperty('--cursor-x', x + 'px');
+        canvasWrapper.style.setProperty('--cursor-y', y + 'px');
+    });
+}
+
+// Add this function to capture image data after image is loaded
+function captureOriginalImageData() {
+    if (!image) return null;
     
-    canvasWrapper.style.setProperty('--cursor-x', x + 'px');
-    canvasWrapper.style.setProperty('--cursor-y', y + 'px');
-});
+    const imageWidth = image.naturalWidth || image.width;
+    const imageHeight = image.naturalHeight || image.height;
+    
+    // Create a temporary canvas to store the original image data
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = imageWidth;
+    tempCanvas.height = imageHeight;
+    const tempCtx = tempCanvas.getContext('2d');
+    tempCtx.drawImage(image, 0, 0, imageWidth, imageHeight);
+    
+    const imageData = tempCtx.getImageData(0, 0, imageWidth, imageHeight);
+    
+    return {
+        canvas: tempCanvas,
+        imageData: imageData,
+        width: imageWidth,
+        height: imageHeight,
+        original: true  // Flag to indicate this is the original image
+    };
+}
+
+function setupPasteHandler() {
+    document.addEventListener('paste', function(event) {
+        const items = event.clipboardData.items;
+        
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].type.indexOf('image') !== -1) {
+                const blob = items[i].getAsFile();
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        image = img;
+                        setupCanvas();
+                        
+                        // Capture pasted image data immediately
+                        const capturedData = captureOriginalImageData();
+                        originalImageData = capturedData ? capturedData.imageData : null;
+                        
+                        resetAllPoints();
+                        if (statusMessage) {
+                            statusMessage.textContent = `Image pasted (${img.naturalWidth}×${img.naturalHeight}px). Select 4+ points.`;
+                            statusMessage.className = "status success";
+                        }
+                        
+                        if (capturedData) {
+                            window.currentImageData = capturedData;
+                        }
+                        
+                        // ENABLE PRINT BUTTON IMMEDIATELY AFTER PASTE
+                        enablePrintButton();
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(blob);
+                break;
+            }
+        }
+    });
+}
 
 // Initialize
 function init() {
-    printBtn.addEventListener('click', () => printCorrectedDocument({ transformedImageData, statusMessage }));
-    fileUpload.addEventListener('click', () => imageInput.click());
-    imageInput.addEventListener('change', handleImageUpload);
+    // Get reference to the source canvas that has all the brightness adjustments
+    const sourceCanvasElement = document.getElementById('sourceCanvas');
     
-    addPointsBtn.addEventListener('click', () => setMode('add'));
-    movePointsBtn.addEventListener('click', () => setMode('move'));
-    deletePointsBtn.addEventListener('click', () => setMode('delete'));
+    if (printBtn) {
+        printBtn.addEventListener('click', () => printCorrectedDocument({ 
+            transformedImageData, 
+            statusMessage,
+            sourceCanvas: sourceCanvasElement  // Pass the canvas with brightness adjustments
+        }));
+    }
     
-    transformBtn.addEventListener('click', applyPerspectiveCorrection);
-    downloadBtn.addEventListener('click', () => downloadCorrectedImage({ transformedImageData, image, pointsCanvas, mapPointUsingMVC, PerspectiveTransform, statusMessage }));
-    resetBtn.addEventListener('click', resetAllPoints);
+    if (fileUpload) {
+        fileUpload.addEventListener('click', () => {
+            if (imageInput) imageInput.click();
+        });
+    }
     
-    pointsCanvas.addEventListener('mousedown', handleCanvasMouseDown);
-    pointsCanvas.addEventListener('mousemove', handleCanvasMouseMove);
-    pointsCanvas.addEventListener('mouseup', handleCanvasMouseUp);
-    pointsCanvas.addEventListener('mouseleave', handleCanvasMouseUp);
+    if (imageInput) {
+        imageInput.addEventListener('change', handleImageUpload);
+    }
+    
+    if (addPointsBtn) {
+        addPointsBtn.addEventListener('click', () => setMode('add'));
+    }
+    
+    if (movePointsBtn) {
+        movePointsBtn.addEventListener('click', () => setMode('move'));
+    }
+    
+    if (deletePointsBtn) {
+        deletePointsBtn.addEventListener('click', () => setMode('delete'));
+    }
+    
+    if (transformBtn) {
+        transformBtn.addEventListener('click', applyPerspectiveCorrection);
+    }
+    
+    if (downloadBtn) {
+        downloadBtn.addEventListener('click', () => downloadCorrectedImage({ transformedImageData, statusMessage }));
+    }
+    
+    if (resetBtn) {
+        resetBtn.addEventListener('click', resetAllPoints);
+    }
+    
+    if (pointsCanvas) {
+        pointsCanvas.addEventListener('mousedown', handleCanvasMouseDown);
+        pointsCanvas.addEventListener('mousemove', handleCanvasMouseMove);
+        pointsCanvas.addEventListener('mouseup', handleCanvasMouseUp);
+        pointsCanvas.addEventListener('mouseleave', handleCanvasMouseUp);
+    }
     
     setMode('add');
-    
+    setupPasteHandler();
+
     // Initialize grid
-    if (typeof window.initGrid === 'function') {
-        window.initGrid();
+    if (typeof window.drawGrid === 'function') {
+        window.drawGrid();
     }
     
     loadSampleImage();
@@ -98,12 +298,17 @@ function loadSampleImage() {
     sampleImage.onload = function() {
         image = sampleImage;
         setupCanvas();
-        statusMessage.textContent = "Sample image loaded. Select 4+ points to define perspective correction area.";
-        statusMessage.className = "status success";
+        if (statusMessage) {
+            statusMessage.textContent = "Sample image loaded. Select 4+ points to define perspective correction area.";
+            statusMessage.className = "status success";
+        }
+        enablePrintButton(); // Enable print button for sample image too
     };
     sampleImage.onerror = function() {
-        statusMessage.textContent = "Failed to load sample image. Please upload your own image.";
-        statusMessage.className = "status error";
+        if (statusMessage) {
+            statusMessage.textContent = "Failed to load sample image. Please upload your own image.";
+            statusMessage.className = "status error";
+        }
     };
 
     sampleImage.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
@@ -121,12 +326,16 @@ function handleImageUpload(event) {
             image = img;
             setupCanvas();
             resetAllPoints();
-            statusMessage.textContent = `Image loaded (${img.naturalWidth}×${img.naturalHeight}px). Original resolution preserved. Select 4+ points.`;
-            statusMessage.className = "status success";
+            if (statusMessage) {
+                statusMessage.textContent = `Image loaded (${img.naturalWidth}×${img.naturalHeight}px). Original resolution preserved. Select 4+ points.`;
+                statusMessage.className = "status success";
+            }
+            enablePrintButton(); // Enable print button for uploaded image
         };
         img.src = e.target.result;
     };
     reader.readAsDataURL(file);
+    //drawGrid();
 }
 
 // Set up canvas dimensions - PRESERVE ORIGINAL RESOLUTION
@@ -134,6 +343,8 @@ function setupCanvas() {
     if (!image) return;
     
     const container = document.querySelector('.canvas-wrapper');
+    if (!container) return;
+    
     const containerWidth = container.clientWidth;
     const containerHeight = container.clientHeight;
     
@@ -154,10 +365,15 @@ function setupCanvas() {
     }
     
     // Set canvas to ORIGINAL image resolution (not display size)
-    sourceCanvas.width = imageWidth;
-    sourceCanvas.height = imageHeight;
-    pointsCanvas.width = imageWidth;
-    pointsCanvas.height = imageHeight;
+    if (sourceCanvas) {
+        sourceCanvas.width = imageWidth;
+        sourceCanvas.height = imageHeight;
+    }
+    
+    if (pointsCanvas) {
+        pointsCanvas.width = imageWidth;
+        pointsCanvas.height = imageHeight;
+    }
     
     // Calculate scale factor between display and actual canvas
     displayScale = imageWidth / displayWidth;
@@ -166,23 +382,36 @@ function setupCanvas() {
     window.currentDisplayScale = displayScale;
     
     // Set CSS display size (visual size in browser)
-    sourceCanvas.style.width = displayWidth + 'px';
-    sourceCanvas.style.height = displayHeight + 'px';
-    pointsCanvas.style.width = displayWidth + 'px';
-    pointsCanvas.style.height = displayHeight + 'px';
+    if (sourceCanvas) {
+        sourceCanvas.style.width = displayWidth + 'px';
+        sourceCanvas.style.height = displayHeight + 'px';
+    }
+    
+    if (pointsCanvas) {
+        pointsCanvas.style.width = displayWidth + 'px';
+        pointsCanvas.style.height = displayHeight + 'px';
+    }
     
     // Center canvases in container
     const offsetX = (containerWidth - displayWidth) / 2;
     const offsetY = (containerHeight - displayHeight) / 2;
     
-    sourceCanvas.style.left = offsetX + 'px';
-    sourceCanvas.style.top = offsetY + 'px';
-    pointsCanvas.style.left = offsetX + 'px';
-    pointsCanvas.style.top = offsetY + 'px';
+    if (sourceCanvas) {
+        sourceCanvas.style.left = offsetX + 'px';
+        sourceCanvas.style.top = offsetY + 'px';
+    }
+    
+    if (pointsCanvas) {
+        pointsCanvas.style.left = offsetX + 'px';
+        pointsCanvas.style.top = offsetY + 'px';
+    }
     
     // Draw image at FULL RESOLUTION
-    sourceCtx.drawImage(image, 0, 0, imageWidth, imageHeight);
-    originalImageData = sourceCtx.getImageData(0, 0, imageWidth, imageHeight);
+    if (sourceCtx && sourceCanvas) {
+        sourceCtx.drawImage(image, 0, 0, imageWidth, imageHeight);
+        const capturedData = captureOriginalImageData();
+        originalImageData = capturedData ? capturedData.imageData : null;
+    }
     
     points = [];
     selectedPointIndex = -1;
@@ -201,26 +430,34 @@ function setupCanvas() {
 function setMode(newMode) {
     mode = newMode;
     
-    addPointsBtn.classList.remove('active');
-    movePointsBtn.classList.remove('active');
-    deletePointsBtn.classList.remove('active');
+    if (addPointsBtn) addPointsBtn.classList.remove('active');
+    if (movePointsBtn) movePointsBtn.classList.remove('active');
+    if (deletePointsBtn) deletePointsBtn.classList.remove('active');
     
     if (mode === 'add') {
-        addPointsBtn.classList.add('active');
-        statusMessage.textContent = "Add Points mode: Click on the image to add perspective correction points.";
+        if (addPointsBtn) addPointsBtn.classList.add('active');
+        if (statusMessage) {
+            statusMessage.textContent = "Add Points mode: Click on the image to add perspective correction points.";
+        }
     } else if (mode === 'move') {
-        movePointsBtn.classList.add('active');
-        statusMessage.textContent = "Move Points mode: Click and drag points to adjust their position.";
+        if (movePointsBtn) movePointsBtn.classList.add('active');
+        if (statusMessage) {
+            statusMessage.textContent = "Move Points mode: Click and drag points to adjust their position.";
+        }
     } else if (mode === 'delete') {
-        deletePointsBtn.classList.add('active');
-        statusMessage.textContent = "Delete Points mode: Click on points to remove them.";
+        if (deletePointsBtn) deletePointsBtn.classList.add('active');
+        if (statusMessage) {
+            statusMessage.textContent = "Delete Points mode: Click on points to remove them.";
+        }
     }
     
-    statusMessage.className = "status";
+    if (statusMessage) statusMessage.className = "status";
 }
 
 // Get canvas coordinates from mouse event - ACCOUNTING FOR SCALE
 function getCanvasCoordinates(event) {
+    if (!pointsCanvas) return { x: 0, y: 0 };
+    
     const rect = pointsCanvas.getBoundingClientRect();
     
     // Get mouse position relative to canvas display
@@ -276,6 +513,7 @@ function handleCanvasMouseDown(event) {
 // Handle mouse move on canvas
 function handleCanvasMouseMove(event) {
     if (!image || mode !== 'move' || !isDragging || selectedPointIndex < 0) return;
+    if (!sourceCanvas) return;
     
     const coords = getCanvasCoordinates(event);
     const x = Math.max(0, Math.min(sourceCanvas.width, coords.x));
@@ -294,12 +532,18 @@ function handleCanvasMouseUp() {
 
 // Update point counter display
 function updatePointCount() {
-    pointCount.textContent = points.length;
-    transformBtn.disabled = points.length < 4;
+    if (pointCount) {
+        pointCount.textContent = points.length;
+    }
+    if (transformBtn) {
+        transformBtn.disabled = points.length < 4;
+    }
 }
 
 // Draw points on the canvas - SCALED FOR DISPLAY
 function drawPoints() {
+    if (!pointsCtx || !pointsCanvas) return;
+    
     pointsCtx.clearRect(0, 0, pointsCanvas.width, pointsCanvas.height);
     
     // Scale line width and point size for display
@@ -351,8 +595,10 @@ function drawPoints() {
 // Apply perspective correction
 function applyPerspectiveCorrection() {
     if (!image || points.length < 4) {
-        statusMessage.textContent = "Please select at least 4 points for perspective correction.";
-        statusMessage.className = "status error";
+        if (statusMessage) {
+            statusMessage.textContent = "Please select at least 4 points for perspective correction.";
+            statusMessage.className = "status error";
+        }
         return;
     }
     
@@ -364,7 +610,6 @@ function applyPerspectiveCorrection() {
         } else {
             applyComplexPerspective(orderedPoints);
         }
-        printBtn.disabled = false;
         
         // Redraw grid after transformation
         if (typeof window.drawGrid === 'function') {
@@ -372,8 +617,10 @@ function applyPerspectiveCorrection() {
         }
     } catch (error) {
         console.error("Perspective correction error:", error);
-        statusMessage.textContent = `Error: ${error.message || 'Please try adjusting your points.'}`;
-        statusMessage.className = "status error";
+        if (statusMessage) {
+            statusMessage.textContent = `Error: ${error.message || 'Please try adjusting your points.'}`;
+            statusMessage.className = "status error";
+        }
     }
 }
 
@@ -394,17 +641,22 @@ function resetAllPoints() {
     isDragging = false;
     transformedImageData = null;
     
-    if (originalImageData) {
+    if (!originalImageData && image) {
+        const capturedData = captureOriginalImageData();
+        originalImageData = capturedData ? capturedData.imageData : null;
+    }
+    
+    if (originalImageData && sourceCtx) {
         sourceCtx.putImageData(originalImageData, 0, 0);
-    } else if (image) {
+    } else if (image && sourceCtx && sourceCanvas) {
         const imageWidth = image.naturalWidth || image.width;
         const imageHeight = image.naturalHeight || image.height;
         sourceCtx.drawImage(image, 0, 0, imageWidth, imageHeight);
     }
     
-    pointsCanvas.style.pointerEvents = 'all';
-    downloadBtn.disabled = true;
-    printBtn.disabled = true;
+    if (pointsCanvas) {
+        pointsCanvas.style.pointerEvents = 'all';
+    }
 
     updatePointCount();
     drawPoints();
@@ -414,9 +666,10 @@ function resetAllPoints() {
         window.drawGrid(sourceCanvas, displayScale);
     }
     
-    statusMessage.textContent = "All points reset. Select 4+ points to define perspective correction area.";
-    statusMessage.className = "status";
+    if (statusMessage) {
+        statusMessage.textContent = "All points reset. Select 4+ points to define perspective correction area.";
+        statusMessage.className = "status";
+    }
 }
-
 // Initialize on page load
 window.addEventListener('DOMContentLoaded', init);

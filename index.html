@@ -98,6 +98,297 @@
       margin-bottom: 10px;
       fill: currentColor;
     }
+
+    /* Additional styles for the correction dropdown - using unique class names to avoid conflicts */
+    .correction-dropdown-wrapper {
+      position: relative;
+      width: 100%;
+      margin: 0.5rem 0 1rem 0;
+    }
+
+    .correction-dropdown-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      background: white;
+      border: 1px solid #cfdfed;
+      border-radius: 60px;
+      padding: 0.75rem 1.5rem;
+      width: 100%;
+      font-size: 1rem;
+      font-weight: 550;
+      font-family: inherit;
+      color: #1f3a4b;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+      background-color: #ffffff;
+    }
+
+    .correction-dropdown-btn:hover {
+      background-color: #f9fcff;
+      border-color: #90b4e0;
+      box-shadow: 0 8px 18px -8px rgba(45, 85, 120, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .correction-dropdown-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .correction-new-icon {
+      width: 1.35rem;
+      height: 1.35rem;
+      display: block;
+    }
+
+    .correction-chevron {
+      width: 1rem;
+      height: 1rem;
+      transition: transform 0.25s ease;
+      fill: #6c8db0;
+    }
+
+    .correction-menu-list {
+      position: absolute;
+      top: calc(100% + 0.5rem);
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      border-radius: 1.5rem;
+      box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.2);
+      list-style: none;
+      padding: 0.6rem 0;
+      margin: 0;
+      z-index: 50;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition: opacity 0.2s ease, visibility 0.2s, transform 0.2s ease;
+      border: 1px solid #eef3fc;
+    }
+
+    .correction-menu-list.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .correction-menu-list li {
+      padding: 0;
+    }
+
+    .correction-menu-list button {
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #1f3b4c;
+      cursor: pointer;
+      transition: background 0.15s;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .correction-menu-list button:hover {
+      background-color: #f0f6fe;
+      color: #0f2e42;
+    }
+
+    .correction-feedback-area {
+      margin-top: 1rem;
+      background: #eef2f8;
+      border-radius: 1rem;
+      padding: 0.7rem 1rem;
+      font-size: 0.8rem;
+      color: #1e4a76;
+      border-left: 3px solid #2d7fff;
+    }
+
+    .correction-menu-icon {
+      width: 1rem;
+      height: 1rem;
+    }
+
+    /* Paste notification style */
+    .paste-notification {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #28a745;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      z-index: 1000;
+      animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; visibility: hidden; }
+    }
+
+.bw-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 199;
+    display: none;
+}
+
+.bw-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    z-index: 200;
+    display: none;
+}
+
+.bw-popup.active {
+    display: block;
+    width: 100%;
+    height: auto;
+    animation: fadeInScale 0.3s ease-in-out;
+}
+
+.bw-popup-header {
+    padding: 16px 20px;
+    background: #2c3e50;
+    color: white;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.bw-close-btn {
+    background: none;
+    border: none;
+    text-align: center;
+    justify-content: center;
+    color: white;
+    text-decoration-color: #ecf0f1;
+    font-size: 24px;
+    cursor: pointer;
+    width: 30%;
+    height: 30%;
+    border-radius: 25%;
+}
+
+.bw-close-btn:hover {
+    background: rgba(0, 0, 0, 0.2);
+    color: #ecf0f1;
+}
+        .bw-popup-content {
+            padding: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .bw-control-group {
+            margin-bottom: 20px;
+        }
+        
+        .bw-control-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .bw-control-group input {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+        
+        .bw-value-display {
+            font-size: 11px;
+            color: #7f8c8d;
+            text-align: right;
+        }
+        
+        .bw-preset-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .bw-preset-btn {
+            flex: 1;
+            padding: 8px;
+            background: #ecf0f1;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.2s;
+        }
+        
+        .bw-preset-btn:hover {
+            background: #bdc3c7;
+        }
+        
+        .bw-reset-btn {
+            width: 100%;
+            padding: 10px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        
+        .bw-reset-btn:hover {
+            background: #2980b9;
+        }
+        
+        /* Range input styling */
+        input[type="range"] {
+            appearance: none;
+            background: #ecf0f1;
+            height: 4px;
+            border-radius: 2px;
+        }
+        
+        input[type="range"]:focus {
+            outline: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #3498db;
+            cursor: pointer;
+        }
   </style>
 
   <link rel="stylesheet" href="styles.css">
@@ -118,11 +409,69 @@
         high-quality corrected results — all directly in your browser.
       </p>
     </header>
+<!-- Popup Container -->
+<div class="bw-popup" id="bwPopup">
+    <div class="bw-popup-header" id="bwPopupHeader">
+        <h3>Black & White Filter Controls</h3>
+        <button class="bw-close-btn" id="bwCloseBtn">Close&times;</button>
+    </div>
+    <div class="bw-popup-content">
+            <div class="bw-preset-buttons">
+                <button class="bw-preset-btn" data-preset="normal">Normal</button>
+                <button class="bw-preset-btn" data-preset="highContrast">High Contrast</button>
+                <button class="bw-preset-btn" data-preset="lowContrast">Low Contrast</button>
+                <button class="bw-preset-btn" data-preset="dramatic">Dramatic</button>
+            </div>
+            
+            <div class="bw-control-group">
+                <label>Dark Threshold: <span id="darkThresholdVal">120</span></label>
+                <input type="range" id="darkThreshold" min="0" max="255" step="1" value="120">
+                <div class="bw-value-display">Below this value: darken shadows</div>
+            </div>
+            
+            <div class="bw-control-group">
+                <label>Dark Factor: <span id="darkFactorVal">0.30</span></label>
+                <input type="range" id="darkFactor" min="0" max="1" step="0.01" value="0.3">
+                <div class="bw-value-display">How much to darken shadows (0-1)</div>
+            </div>
+            
+            <div class="bw-control-group">
+                <label>Light Threshold: <span id="lightThresholdVal">200</span></label>
+                <input type="range" id="lightThreshold" min="0" max="255" step="1" value="200">
+                <div class="bw-value-display">Above this value: preserve highlights</div>
+            </div>
+            
+            <div class="bw-control-group">
+                <label>Midtone Min: <span id="midMinVal">100</span></label>
+                <input type="range" id="midMin" min="0" max="255" step="1" value="100">
+                <div class="bw-value-display">Midtone range lower bound</div>
+            </div>
+            
+            <div class="bw-control-group">
+                <label>Midtone Max: <span id="midMaxVal">200</span></label>
+                <input type="range" id="midMax" min="0" max="255" step="1" value="200">
+                <div class="bw-value-display">Midtone range upper bound</div>
+            </div>
+            
+            <div class="bw-control-group">
+                <label>Midtone Boost: <span id="midBoostVal">1.20</span></label>
+                <input type="range" id="midBoost" min="0.5" max="2" step="0.01" value="1.2">
+                <div class="bw-value-display">Boost factor for midtones</div>
+            </div>
+            
+            <div class="bw-control-group">
+                <label>Max Brightness: <span id="maxBrightnessVal">250</span></label>
+                <input type="range" id="maxBrightness" min="0" max="255" step="1" value="250">
+                <div class="bw-value-display">Cap for boosted midtones</div>
+            </div>
+        <!-- Your slider controls here -->
+        <button class="bw-reset-btn" id="bwResetBtn">Reset to Defaults</button>
+    </div>
+</div>
 
     <main class="main-content">
       <!-- LEFT PANEL: Controls -->
       <section class="left-panel">
-        <h2 class="panel-title">Controls</h2>
 
         <div class="control-group">
           <div class="control-label">Upload Image</div>
@@ -133,6 +482,9 @@
             <p>Click to upload an image or drag and drop</p>
             <p style="font-size: 0.9rem; margin-top: 5px; color: #a5d8ff;">
               Supported formats: JPG, PNG, WebP
+            </p>
+            <p style="font-size: 0.85rem; margin-top: 8px; color: #ffd966;">
+              📋 Or press Ctrl+V (Cmd+V) to paste an image from clipboard
             </p>
             <input type="file" id="imageInput" accept="image/*" hidden>
           </div>
@@ -184,7 +536,7 @@
             </svg> Print Corrected Document
           </button>
 
-          <button class="btn btn-download" id="downloadBtn" disabled>
+          <button class="btn btn-download" id="downloadBtn">
             <svg class="icon-svg fas fa-download" viewBox="0 0 512 512">
               <path d="M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32V274.7l-73.4-73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0l128-128c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L288 274.7V32zM64 352c-35.3 0-64 28.7-64 64v32c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V416c0-35.3-28.7-64-64-64H346.5l-45.3 45.3c-25 25-65.5 25-90.5 0L165.5 352H64zm368 56a24 24 0 1 1 0 48 24 24 0 1 1 0-48z"/>
             </svg> Download Corrected Image
@@ -193,7 +545,7 @@
           <button class="btn btn-reset" id="resetBtn">
             <svg class="icon-svg fas fa-redo" viewBox="0 0 512 512">
               <path d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/>
-            </svg> Reset All Points
+            </svg> Reset Everything 
           </button>
         </div>
 
@@ -205,6 +557,116 @@
       <!-- MIDDLE PANEL: Image Editor -->
       <section class="image-container">
         <h2 class="panel-title">Image Editor</h2>
+        <h2 class="panel-title">Left side is controls</h2>
+        
+        <!-- CORRECTION DROPDOWN - Added without modifying existing class names -->
+        <div class="correction-dropdown-wrapper">
+          <div class="correction-dropdown-btn" id="correctionTriggerBtn">
+            <div class="correction-dropdown-left">
+              <!-- New SVG replacing sync-alt - modern image correction icon -->
+              <svg class="correction-new-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 3L13.5 5.5L16 7L14 9.5L17.5 8L19 10.5L17.5 7.5L20 5.5L17 5L15 3Z" fill="#3e7eb3" stroke="#2c628b" stroke-width="0.8"/>
+                <path d="M5 14L7 12L9 14L11 12L13 14L12 16H6L5 14Z" fill="#eec77e" stroke="#c4802f" stroke-width="0.7"/>
+                <circle cx="7.5" cy="10.5" r="1.2" fill="#ffc285" stroke="#c2823a" stroke-width="0.6"/>
+                <path d="M18 14L20 15.5L18 18L15 17L18 14Z" fill="#b6d6f2" stroke="#3f77a7" stroke-width="0.7"/>
+                <path d="M3 20L21 20" stroke="#6f95b9" stroke-width="1.2" stroke-linecap="round"/>
+                <path d="M20 4L4 20" stroke="#8fafcc" stroke-width="0.8" stroke-dasharray="2 1.5"/>
+              </svg>
+              <span>Apply Image Corrections</span>
+            </div>
+            <svg class="correction-chevron" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M7 10l5 5 5-5H7z"/>
+            </svg>
+          </div>
+
+          <ul class="correction-menu-list" id="correctionMenuList" role="menu">
+            <li role="menuitem">
+              <button id="optBrightnessBtn">
+                <svg class="correction-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M12 5v2M12 17v2M5 12H3M19 12h2M7.05 7.05L5.636 5.636M16.95 16.95l1.414 1.414M16.95 7.05l1.414-1.414M7.05 16.95l-1.414 1.414"/>
+                </svg>
+                Brightness
+              </button>
+            </li>
+            <li role="menuitem">
+              <button id="optBlackAndWhiteBtn">
+                <svg class="correction-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M12 5v2M12 17v2M5 12H3M19 12h2M7.05 7.05L5.636 5.636M16.95 16.95l1.414 1.414M16.95 7.05l1.414-1.414M7.05 16.95l-1.414 1.414"/>
+                </svg>
+                Black &amp; White
+              </button>
+                              <!-- Popup Overlay -->
+<div class="bw-popup-overlay" id="bwOverlay"></div>
+
+
+
+<!-- Button to open popup -->
+<button id="openBWPopup">Open B&W Controls</button>
+            </li>
+            <li role="menuitem">
+              <button id="optAutoBalanceBtn">
+                <svg class="correction-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M12 5v2M12 17v2M5 12H3M19 12h2M7.05 7.05L5.636 5.636M16.95 16.95l1.414 1.414M16.95 7.05l1.414-1.414M7.05 16.95l-1.414 1.414"/>
+                </svg>
+                Auto Color &amp; Balance
+              </button>
+            </li>
+            <li role="menuitem">
+              <button id="optClarityBtn">
+                <svg class="correction-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M3 12h4l2-3 3 3 3-3 2 3h4"/>
+                  <path d="M5 18h14"/>
+                </svg>
+                Smart Sharpness + Clarity
+              </button>
+            </li>
+            <li role="menuitem">
+              <button id="optExposureBtn">
+                <svg class="correction-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="12" cy="12" r="9"/>
+                  <path d="M12 8v8M8 12h8"/>
+                </svg>
+                Exposure &amp; Tone Curve
+              </button>
+            </li>
+            <li><hr style="margin: 0.3rem 0; border-top: 1px solid #e2edf5;"/></li>
+            <li role="menuitem">
+              <button id="optDehazeBtn">
+                <svg class="correction-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M3 12h18M6 16h12M6 8h12M12 3v2M12 19v2"/>
+                  <path d="M21 12a9 9 0 0 1-18 0"/>
+                </svg>
+                Dehaze &amp; Vibrance
+              </button>
+            </li>
+            <li role="menuitem">
+              <button id="optFilmEmulationBtn">
+                <svg class="correction-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="4" y="6" width="16" height="12" rx="1.5"/>
+                  <path d="M8 6v12M16 6v12M12 6v12M4 10h3M17 10h3M4 14h3M17 14h3"/>
+                </svg>
+                Film Emulation (Soft Look)
+              </button>
+            </li>
+             <li role="menuitem">
+              <button id="optResetBtn">
+                <svg class="correction-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="4" y="6" width="16" height="12" rx="1.5"/>
+                  <path d="M8 6v12M16 6v12M12 6v12M4 10h3M17 10h3M4 14h3M17 14h3"/>
+                </svg>
+                Reset Corrections
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <div class="correction-feedback-area" id="correctionFeedbackPanel">
+          <span>🎨</span> <span id="correctionFeedbackMsg">Select a correction from dropdown → updates canvas instantly</span>
+        </div>
+
         <div class="canvas-wrapper">
           <canvas id="sourceCanvas"></canvas>
           <canvas id="gridCanvas"></canvas>
@@ -280,143 +742,646 @@
       </p>
     </footer>
   </div>
-  <script type="module">
-    // Grid state management
-    window.gridState = {
-      enabled: false,
-      canvas: null,
-      ctx: null
-    };
+<script>
+  let originalImageWidth = 0;
+let originalImageHeight = 0;
+let currentScale = 1;
+    // Minimal popup logic (no dragging)
+    const popup = document.getElementById('bwPopup');
+    const overlay = document.getElementById('bwOverlay');
 
-    // Export grid functions for use by script.js
-    window.drawGrid = function(sourceCanvas, displayScale) {
-      const gridCanvas = window.gridState.canvas;
-      const gridCtx = window.gridState.ctx;
-      
-      if (!gridCanvas || !gridCtx || !window.gridState.enabled) {
-        if (gridCanvas && gridCtx) {
-          gridCtx.clearRect(0, 0, gridCanvas.width, gridCanvas.height);
-        }
-        return;
-      }
+    function openPopup() {
+        if (popup) popup.style.display = 'block';
+        if (overlay) overlay.style.display = 'block';
+    }
 
-      // Match source canvas dimensions
-      if (gridCanvas.width !== sourceCanvas.width || gridCanvas.height !== sourceCanvas.height) {
-        gridCanvas.width = sourceCanvas.width;
-        gridCanvas.height = sourceCanvas.height;
+    function closePopup() {
+        if (popup) popup.style.display = 'none';
+        if (overlay) overlay.style.display = 'none';
+    }
+
+    const openBtn = document.getElementById('openBWPopup');
+    const closeBtn = document.getElementById('bwCloseBtn');
+    
+    if (openBtn) openBtn.onclick = openPopup;
+    if (closeBtn) closeBtn.onclick = closePopup;
+    if (overlay) overlay.onclick = closePopup;
+
+    (function() {
+        // ========== IMAGE CORRECTION DROPDOWN FUNCTIONALITY ==========
+        const sourceCanvas = document.getElementById('sourceCanvas');
+        const ctx = sourceCanvas.getContext('2d', { willReadFrequently: true });
         
-        // Match display styling
-        gridCanvas.style.width = sourceCanvas.style.width;
-        gridCanvas.style.height = sourceCanvas.style.height;
-        gridCanvas.style.left = sourceCanvas.style.left;
-        gridCanvas.style.top = sourceCanvas.style.top;
-      }
-
-      gridCtx.clearRect(0, 0, gridCanvas.width, gridCanvas.height);
-
-      // Calculate average brightness
-      const sourceCtx = sourceCanvas.getContext('2d');
-      const imageData = sourceCtx.getImageData(0, 0, sourceCanvas.width, sourceCanvas.height);
-      const data = imageData.data;
-      let totalBrightness = 0;
-      let sampleCount = 0;
-      
-      // Sample every 100th pixel for performance
-      for (let i = 0; i < data.length; i += 400) {
-        const r = data[i];
-        const g = data[i + 1];
-        const b = data[i + 2];
-        const brightness = (0.299 * r + 0.587 * g + 0.114 * b);
-        totalBrightness += brightness;
-        sampleCount++;
-      }
-      
-      const avgBrightness = totalBrightness / sampleCount;
-      
-      // Use white grid for dark images, black grid for light images
-      const gridColor = avgBrightness < 128 ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)';
-      
-      // Grid cell size scaled to actual canvas resolution
-      const gridSize = 30 * displayScale;
-      
-      gridCtx.strokeStyle = gridColor;
-      gridCtx.lineWidth = 1 * displayScale;
-      gridCtx.setLineDash([5 * displayScale, 5 * displayScale]);
-      
-      // Draw vertical lines
-      for (let x = 0; x < gridCanvas.width; x += gridSize) {
-        gridCtx.beginPath();
-        gridCtx.moveTo(x, 0);
-        gridCtx.lineTo(x, gridCanvas.height);
-        gridCtx.stroke();
-      }
-      
-      // Draw horizontal lines
-      for (let y = 0; y < gridCanvas.height; y += gridSize) {
-        gridCtx.beginPath();
-        gridCtx.moveTo(0, y);
-        gridCtx.lineTo(gridCanvas.width, y);
-        gridCtx.stroke();
-      }
-      
-      gridCtx.setLineDash([]);
-    };
-
-    window.initGrid = function() {
-      const gridCanvas = document.getElementById('gridCanvas');
-      if (gridCanvas) {
-        window.gridState.canvas = gridCanvas;
-        window.gridState.ctx = gridCanvas.getContext('2d');
-        document.getElementById('toggleGridBtn').disabled = false;
-      }
-    };
-
-    // Clipboard paste functionality
-    document.addEventListener('paste', function(e) {
-      const items = e.clipboardData?.items;
-      if (!items) return;
-
-      for (let i = 0; i < items.length; i++) {
-        if (items[i].type.indexOf('image') !== -1) {
-          e.preventDefault();
-          const blob = items[i].getAsFile();
-          const reader = new FileReader();
-          reader.onload = function(event) {
-            const imageInput = document.getElementById('imageInput');
-            const file = new File([blob], 'pasted-image.png', { type: blob.type });
-            const dataTransfer = new DataTransfer();
-            dataTransfer.items.add(file);
-            imageInput.files = dataTransfer.files;
-            const changeEvent = new Event('change', { bubbles: true });
-            imageInput.dispatchEvent(changeEvent);
-          };
-          reader.readAsDataURL(blob);
-          break;
+        // Store original image data for corrections
+        let originalCanvasData = null;
+        let currentCorrectionType = 'none';
+        
+        // Function to show temporary notification
+        function showNotification(message, isError = false) {
+            const notification = document.createElement('div');
+            notification.className = 'paste-notification';
+            notification.textContent = message;
+            notification.style.backgroundColor = isError ? '#dc3545' : '#28a745';
+            document.body.appendChild(notification);
+            setTimeout(() => {
+                if (notification.parentNode) notification.parentNode.removeChild(notification);
+            }, 3000);
         }
-      }
-    });
+        
+        // Function to load image from blob/file
+        function loadImageFromSource(fileOrBlob, sourceName = 'Upload') {
+            if (!fileOrBlob || !fileOrBlob.type || !fileOrBlob.type.startsWith('image/')) {
+                showNotification('Invalid image format. Please upload a valid image file.', true);
+                return false;
+            }
+            
+            const img = new Image();
+            const url = URL.createObjectURL(fileOrBlob);
+            
+            img.onload = () => {
+                // Set canvas dimensions to match image
+                originalImageWidth = img.width;
+                originalImageHeight = img.height;
+                sourceCanvas.width = img.width;
+                sourceCanvas.height = img.height;
+                
+                // Update grid and points canvases too
+                const gridCanvas = document.getElementById('gridCanvas');
+                const pointsCanvas = document.getElementById('pointsCanvas');
+                if (gridCanvas) { gridCanvas.width = img.width; gridCanvas.height = img.height; }
+                if (pointsCanvas) { pointsCanvas.width = img.width; pointsCanvas.height = img.height; }
+                
+                ctx.clearRect(0, 0, sourceCanvas.width, sourceCanvas.height);
+                ctx.drawImage(img, 0, 0, img.width, img.height);
+                
+                originalCanvasData = ctx.getImageData(0, 0, sourceCanvas.width, sourceCanvas.height);
 
-    // Toggle grid button handler
-    document.getElementById('toggleGridBtn').addEventListener('click', function() {
-      window.gridState.enabled = !window.gridState.enabled;
-      
-      // Update button state
-      if (window.gridState.enabled) {
-        this.style.background = '#28a745';
-        this.innerHTML = '<svg class="icon-svg fas fa-th" viewBox="0 0 448 512"><path d="M0 72C0 49.9 17.9 32 40 32H88c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V72zM0 232c0-22.1 17.9-40 40-40H88c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V232zM128 392v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V392c0-22.1 17.9-40 40-40H88c22.1 0 40 17.9 40 40zM160 72c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V72zM288 232v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V232c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40zM160 392c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V392zM408 32c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V72c0-22.1 17.9-40 40-40h48zM320 232c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V232zM408 352c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V392c0-22.1 17.9-40 40-40h48z"/></svg> Hide Grid Overlay';
-      } else {
-        this.style.background = '';
-        this.innerHTML = '<svg class="icon-svg fas fa-th" viewBox="0 0 448 512"><path d="M0 72C0 49.9 17.9 32 40 32H88c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V72zM0 232c0-22.1 17.9-40 40-40H88c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V232zM128 392v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V392c0-22.1 17.9-40 40-40H88c22.1 0 40 17.9 40 40zM160 72c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V72zM288 232v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V232c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40zM160 392c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V392zM408 32c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V72c0-22.1 17.9-40 40-40h48zM320 232c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V232zM408 352c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V392c0-22.1 17.9-40 40-40h48z"/></svg> Toggle Grid Overlay';
-      }
-      // Trigger redraw if canvas exists
-      const sourceCanvas = document.getElementById('sourceCanvas');
-      if (sourceCanvas && window.currentDisplayScale) {
-        window.drawGrid(sourceCanvas, window.currentDisplayScale);
-      }
+                // Update status message
+                const statusMsg = document.getElementById('statusMessage');
+                if (statusMsg) {
+                    statusMsg.textContent = `✓ ${sourceName} successful! Image loaded (${img.width}×${img.height}). Select 4 points around the document.`;
+                    statusMsg.className = "status success";
+                }
+                                // Add this line - forces grid to redraw and maintain visibility
+                
+                const feedbackMsg = document.getElementById('correctionFeedbackMsg');
+                if (feedbackMsg) {
+                    feedbackMsg.innerHTML = `📷 ${sourceName} complete. Select correction from dropdown.`;
+                }
+                showNotification(`${sourceName} successful! Image size: ${img.width}×${img.height}px`);
+                
+                // Reset any existing points (if point management exists in script.js)
+                if (window.resetPoints && typeof window.resetPoints === 'function') {
+                    window.resetPoints();
+                }
+                
+                
+                URL.revokeObjectURL(url);
+            };
+
+            
+            img.onerror = () => {
+                showNotification(`Failed to load ${sourceName.toLowerCase()} image. Please try again.`, true);
+                URL.revokeObjectURL(url);
+            };
+            
+            img.src = url;
+            return true;
+        }
+        
+        // ========== IMAGE PASTE FUNCTIONALITY ==========
+        document.addEventListener('paste', function(e) {
+            const items = e.clipboardData?.items;
+            if (!items) return;
+            
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].type.indexOf('image') !== -1) {
+                    e.preventDefault();
+                    const blob = items[i].getAsFile();
+                    loadImageFromSource(blob, 'Pasted image');
+                    
+                    // Also trigger the file input change for consistency with existing scripts
+                    const imageInput = document.getElementById('imageInput');
+                    if (imageInput) {
+                        const dataTransfer = new DataTransfer();
+                        dataTransfer.items.add(blob);
+                        imageInput.files = dataTransfer.files;
+                        const changeEvent = new Event('change', { bubbles: true });
+                        imageInput.dispatchEvent(changeEvent);
+                    }
+                    break;
+                }
+            }
+        });
+        
+        // Wait for canvas to be ready (existing script will populate it)
+        function getOriginalImageData() {
+            if (!originalCanvasData && sourceCanvas && sourceCanvas.width > 0) {
+                originalCanvasData = ctx.getImageData(0, 0, sourceCanvas.width, sourceCanvas.height);
+            }
+            return originalCanvasData;
+        }
+        
+        function updateOriginalData() {
+            if (sourceCanvas && sourceCanvas.width > 0) {
+                originalCanvasData = ctx.getImageData(0, 0, sourceCanvas.width, sourceCanvas.height);
+            }
+        }
+        
+        function resetToOriginal() {
+            if (originalCanvasData) {
+                ctx.putImageData(originalCanvasData, 0, 0);
+                currentCorrectionType = 'none';
+            }
+        }
+        
+        // Apply image correction algorithms
+        let originalImageData = null;
+
+        // ==================== BLACK & WHITE CONTROLS ====================
+        // Store current B&W options
+        let bwOptions = {
+            darkThreshold: 120,
+            darkFactor: 0.3,
+            lightThreshold: 200,
+            midMin: 100,
+            midMax: 200,
+            midBoost: 1.2,
+            maxBrightness: 250
+        };
+
+        // Preset configurations
+        const bwPresets = {
+            normal: { darkThreshold: 120, darkFactor: 0.3, lightThreshold: 200, midMin: 100, midMax: 200, midBoost: 1.2, maxBrightness: 250 },
+            highContrast: { darkThreshold: 100, darkFactor: 0.2, lightThreshold: 200, midMin: 80, midMax: 220, midBoost: 1.4, maxBrightness: 245 },
+            lowContrast: { darkThreshold: 140, darkFactor: 0.6, lightThreshold: 180, midMin: 120, midMax: 180, midBoost: 1.05, maxBrightness: 250 },
+            dramatic: { darkThreshold: 80, darkFactor: 0.15, lightThreshold: 220, midMin: 90, midMax: 210, midBoost: 1.5, maxBrightness: 240 }
+        };
+
+        // Modified black & white function that uses current options
+        function applyBlackAndWhiteWithOptions(r, g, b) {
+            let brightness = (r + g + b) / 3;
+            
+            if (brightness < bwOptions.darkThreshold) {
+                brightness = brightness * bwOptions.darkFactor;
+            } else if (brightness > bwOptions.lightThreshold) {
+                brightness = brightness;
+            } else if (brightness > bwOptions.midMin && brightness <= bwOptions.midMax) {
+                brightness = Math.min(bwOptions.maxBrightness, brightness * bwOptions.midBoost);
+            }
+            
+            return Math.min(255, Math.max(0, Math.floor(brightness)));
+        }
+
+        // Main image correction function
+        function applyImageCorrection(correctionType) {
+            if (!sourceCanvas || !ctx) return;
+            
+            if (!originalImageData && sourceCanvas.width > 0) {
+                originalImageData = ctx.getImageData(0, 0, sourceCanvas.width, sourceCanvas.height);
+            }
+            if (!originalImageData) return;
+            
+            let workingImageData = ctx.getImageData(0, 0, sourceCanvas.width, sourceCanvas.height);
+            
+            const width = sourceCanvas.width;
+            const height = sourceCanvas.height;
+            const srcPixels = workingImageData.data;
+            const newImgData = ctx.createImageData(width, height);
+            const dstPixels = newImgData.data;
+            
+            for (let i = 0; i < srcPixels.length; i += 4) {
+                let r = srcPixels[i];
+                let g = srcPixels[i+1];
+                let b = srcPixels[i+2];
+                
+                if (correctionType === 'autobalance') {
+                    r = Math.min(255, Math.max(0, r * 1.15 + 12));
+                    g = Math.min(255, Math.max(0, g * 1.1 + 8));
+                    b = Math.min(255, Math.max(0, b * 1.05 + 15));
+                } 
+                else if (correctionType === 'clarity') {
+                    r = Math.min(255, Math.max(0, r + (r - 128) * 0.3));
+                    g = Math.min(255, Math.max(0, g + (g - 128) * 0.3));
+                    b = Math.min(255, Math.max(0, b + (b - 128) * 0.28));
+                }
+                else if (correctionType === 'exposure') {
+                    r = Math.min(255, Math.max(0, Math.pow(r/255, 0.85) * 255 * 1.07));
+                    g = Math.min(255, Math.max(0, Math.pow(g/255, 0.85) * 255 * 1.07));
+                    b = Math.min(255, Math.max(0, Math.pow(b/255, 0.85) * 255 * 1.07));
+                }
+                else if (correctionType === 'dehaze') {
+                    let gray = 0.299 * r + 0.587 * g + 0.114 * b;
+                    r = Math.min(255, Math.max(0, r * 1.2 - gray * 0.2 + 15));
+                    g = Math.min(255, Math.max(0, g * 1.2 - gray * 0.2 + 15));
+                    b = Math.min(255, Math.max(0, b * 1.2 - gray * 0.2 + 15));
+                    let avg = (r+g+b)/3;
+                    r = Math.min(255, Math.max(0, r * 1.1 - avg * 0.1));
+                    g = Math.min(255, Math.max(0, g * 1.1 - avg * 0.1));
+                    b = Math.min(255, Math.max(0, b * 1.1 - avg * 0.1));
+                }
+                else if (correctionType === 'film') {
+                    r = Math.min(255, Math.max(0, r * 0.95 + 20));
+                    g = Math.min(255, Math.max(0, g * 0.92 + 15));
+                    b = Math.min(255, Math.max(0, b * 0.9 + 22));
+                    let grain = (Math.random() - 0.5) * 8;
+                    r = Math.min(255, Math.max(0, r + grain));
+                    g = Math.min(255, Math.max(0, g + grain * 0.8));
+                    b = Math.min(255, Math.max(0, b + grain * 1.2));
+                }
+                else if (correctionType === 'brightness') {
+                    let brightnessVal = (r + g + b) / 3;
+                    
+                    if (brightnessVal < 100) {
+                        brightnessVal = brightnessVal * 0.4;
+                    } else if (brightnessVal > 200) {
+                        brightnessVal = Math.min(255, brightnessVal * 1.15);
+                    } else if (brightnessVal >= 100 && brightnessVal <= 200) {
+                        brightnessVal = Math.min(250, brightnessVal * 1.08);
+                    }
+                    
+                    r = Math.min(255, Math.max(0, Math.floor(brightnessVal)));
+                    g = r;
+                    b = r;
+                }
+                else if (correctionType === 'blackandwhite') {
+                    // Use the configurable version
+                    const value = applyBlackAndWhiteWithOptions(r, g, b);
+                    r = value;
+                    g = value;
+                    b = value;
+                }
+                
+                dstPixels[i] = Math.floor(r);
+                dstPixels[i+1] = Math.floor(g);
+                dstPixels[i+2] = Math.floor(b);
+                dstPixels[i+3] = srcPixels[i+3];
+            }
+            
+            ctx.putImageData(newImgData, 0, 0);
+            originalImageData = newImgData;
+            currentCorrectionType = correctionType;
+        }
+
+        // ==================== SLIDER CONTROLS SETUP ====================
+        function setupBWSliders() {
+            const sliders = {
+                darkThreshold: document.getElementById('darkThreshold'),
+                darkFactor: document.getElementById('darkFactor'),
+                lightThreshold: document.getElementById('lightThreshold'),
+                midMin: document.getElementById('midMin'),
+                midMax: document.getElementById('midMax'),
+                midBoost: document.getElementById('midBoost'),
+                maxBrightness: document.getElementById('maxBrightness')
+            };
+            
+            const valueDisplays = {
+                darkThreshold: document.getElementById('darkThresholdVal'),
+                darkFactor: document.getElementById('darkFactorVal'),
+                lightThreshold: document.getElementById('lightThresholdVal'),
+                midMin: document.getElementById('midMinVal'),
+                midMax: document.getElementById('midMaxVal'),
+                midBoost: document.getElementById('midBoostVal'),
+                maxBrightness: document.getElementById('maxBrightnessVal')
+            };
+            
+            // Update display values
+            function updateDisplays() {
+                for (const [key, display] of Object.entries(valueDisplays)) {
+                    if (display) {
+                        const value = bwOptions[key];
+                        display.textContent = (key.includes('Factor') || key.includes('Boost')) ? 
+                            value.toFixed(2) : Math.floor(value);
+                    }
+                }
+            }
+            
+            // Set initial values
+            for (const [key, slider] of Object.entries(sliders)) {
+                if (slider) {
+                    slider.value = bwOptions[key];
+                    slider.addEventListener('input', (e) => {
+                        let value = parseFloat(e.target.value);
+                        bwOptions[key] = value;
+                        updateDisplays();
+                        
+                        // Re-apply black and white correction with new options
+                        if (currentCorrectionType === 'blackandwhite') {
+                            applyImageCorrection('blackandwhite');
+                        }
+                    });
+                }
+            }
+            
+            updateDisplays();
+        }
+
+        // ==================== PRESET BUTTONS ====================
+        function setupBWPresets() {
+            const presetButtons = document.querySelectorAll('.bw-preset-btn');
+            presetButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const preset = e.target.dataset.preset;
+                    if (preset && bwPresets[preset]) {
+                        bwOptions = { ...bwPresets[preset] };
+                        
+                        // Update slider UI
+                        const sliders = {
+                            darkThreshold: document.getElementById('darkThreshold'),
+                            darkFactor: document.getElementById('darkFactor'),
+                            lightThreshold: document.getElementById('lightThreshold'),
+                            midMin: document.getElementById('midMin'),
+                            midMax: document.getElementById('midMax'),
+                            midBoost: document.getElementById('midBoost'),
+                            maxBrightness: document.getElementById('maxBrightness')
+                        };
+                        
+                        for (const [key, slider] of Object.entries(sliders)) {
+                            if (slider) slider.value = bwOptions[key];
+                        }
+                        
+                        // Update displays
+                        const valueDisplays = {
+                            darkThreshold: document.getElementById('darkThresholdVal'),
+                            darkFactor: document.getElementById('darkFactorVal'),
+                            lightThreshold: document.getElementById('lightThresholdVal'),
+                            midMin: document.getElementById('midMinVal'),
+                            midMax: document.getElementById('midMaxVal'),
+                            midBoost: document.getElementById('midBoostVal'),
+                            maxBrightness: document.getElementById('maxBrightnessVal')
+                        };
+                        
+                        for (const [key, display] of Object.entries(valueDisplays)) {
+                            if (display) {
+                                const value = bwOptions[key];
+                                display.textContent = (key.includes('Factor') || key.includes('Boost')) ? 
+                                    value.toFixed(2) : Math.floor(value);
+                            }
+                        }
+                        
+                        // Re-apply black and white correction
+                        if (currentCorrectionType === 'blackandwhite') {
+                            applyImageCorrection('blackandwhite');
+                        }
+                    }
+                });
+            });
+        }
+
+        // ==================== RESET BUTTON ====================
+        function setupBWReset() {
+            const resetBtn = document.getElementById('bwResetBtn');
+            if (resetBtn) {
+                resetBtn.addEventListener('click', () => {
+                    bwOptions = { ...bwPresets.normal };
+                    
+                    // Update all sliders
+                    const sliders = {
+                        darkThreshold: document.getElementById('darkThreshold'),
+                        darkFactor: document.getElementById('darkFactor'),
+                        lightThreshold: document.getElementById('lightThreshold'),
+                        midMin: document.getElementById('midMin'),
+                        midMax: document.getElementById('midMax'),
+                        midBoost: document.getElementById('midBoost'),
+                        maxBrightness: document.getElementById('maxBrightness')
+                    };
+                    
+                    for (const [key, slider] of Object.entries(sliders)) {
+                        if (slider) slider.value = bwOptions[key];
+                    }
+                    
+                    // Update displays
+                    const valueDisplays = {
+                        darkThreshold: document.getElementById('darkThresholdVal'),
+                        darkFactor: document.getElementById('darkFactorVal'),
+                        lightThreshold: document.getElementById('lightThresholdVal'),
+                        midMin: document.getElementById('midMinVal'),
+                        midMax: document.getElementById('midMaxVal'),
+                        midBoost: document.getElementById('midBoostVal'),
+                        maxBrightness: document.getElementById('maxBrightnessVal')
+                    };
+                    
+                    for (const [key, display] of Object.entries(valueDisplays)) {
+                        if (display) {
+                            const value = bwOptions[key];
+                            display.textContent = (key.includes('Factor') || key.includes('Boost')) ? 
+                                value.toFixed(2) : Math.floor(value);
+                        }
+                    }
+                    
+                    // Re-apply black and white correction
+                    if (currentCorrectionType === 'blackandwhite') {
+                        applyImageCorrection('blackandwhite');
+                    }
+                });
+            }
+        }
+
+        // ==================== POPUP CONTROLS ====================
+        function initBWPopup() {
+            const popup = document.getElementById('bwPopup');
+            const overlay = document.getElementById('bwOverlay');
+            const openBtn = document.getElementById('openBWPopup');
+            const closeBtn = document.getElementById('bwCloseBtn');
+            
+            if (!popup || !overlay) return;
+            
+            function openPopup() {
+                popup.classList.add('active');
+                overlay.style.display = 'block';
+            }
+            
+            function closePopup() {
+                popup.classList.remove('active');
+                overlay.style.display = 'none';
+            }
+            
+            if (openBtn) openBtn.addEventListener('click', openPopup);
+            if (closeBtn) closeBtn.addEventListener('click', closePopup);
+            if (overlay) overlay.addEventListener('click', closePopup);
+            
+            // Escape key handler
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && popup.classList.contains('active')) {
+                    closePopup();
+                }
+            });
+            
+            // Initialize all controls
+            setupBWSliders();
+            setupBWPresets();
+            setupBWReset();
+        }
+
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initBWPopup);
+        } else {
+            initBWPopup();
+        }
+        
+        // Dropdown logic
+        const triggerBtn = document.getElementById('correctionTriggerBtn');
+        const menuList = document.getElementById('correctionMenuList');
+        let isMenuVisible = false;
+        
+        function showMenu() {
+            menuList.classList.add('show');
+            isMenuVisible = true;
+        }
+        
+        function hideMenu() {
+            menuList.classList.remove('show');
+            isMenuVisible = false;
+        }
+        
+        if (triggerBtn) {
+            triggerBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                isMenuVisible ? hideMenu() : showMenu();
+            });
+        }
+        
+        window.addEventListener('click', (e) => {
+            if (triggerBtn && !triggerBtn.contains(e.target) && menuList && !menuList.contains(e.target)) {
+                hideMenu();
+            }
+        });
+        
+        function handleCorrection(correctionId, label) {
+            if (!sourceCanvas || sourceCanvas.width === 0) return;
+            
+            if (correctionId === 'reset') {
+                resetToOriginal();
+                const feedbackMsg = document.getElementById('correctionFeedbackMsg');
+                if (feedbackMsg) feedbackMsg.innerHTML = `↺ Correction reset to original.`;
+            } else {
+                applyImageCorrection(correctionId);
+                const feedbackMsg = document.getElementById('correctionFeedbackMsg');
+                if (feedbackMsg) feedbackMsg.innerHTML = `✅ Applied: ${label} — canvas updated instantly.`;
+            }
+            hideMenu();
+        }
+        
+        // Fix the brightness button mapping
+        const optBrightnessBtn = document.getElementById('optBrightnessBtn');
+        const optBlackAndWhiteBtn = document.getElementById('optBlackAndWhiteBtn');
+        const optAutoBalanceBtn = document.getElementById('optAutoBalanceBtn');
+        const optClarityBtn = document.getElementById('optClarityBtn');
+        const optExposureBtn = document.getElementById('optExposureBtn');
+        const optDehazeBtn = document.getElementById('optDehazeBtn');
+        const optFilmEmulationBtn = document.getElementById('optFilmEmulationBtn');
+        const optResetBtn = document.getElementById('optResetBtn');
+        
+        if (optBrightnessBtn) optBrightnessBtn.addEventListener('click', () => handleCorrection('brightness', 'Brightness + Shadow Boost'));
+        if (optBlackAndWhiteBtn) optBlackAndWhiteBtn.addEventListener('click', () => handleCorrection('blackandwhite', 'Black & White'));
+        if (optAutoBalanceBtn) optAutoBalanceBtn.addEventListener('click', () => handleCorrection('autobalance', 'Auto Color & Balance'));
+        if (optClarityBtn) optClarityBtn.addEventListener('click', () => handleCorrection('clarity', 'Smart Sharpness + Clarity'));
+        if (optExposureBtn) optExposureBtn.addEventListener('click', () => handleCorrection('exposure', 'Exposure & Tone Curve'));
+        if (optDehazeBtn) optDehazeBtn.addEventListener('click', () => handleCorrection('dehaze', 'Dehaze & Vibrance'));
+        if (optFilmEmulationBtn) optFilmEmulationBtn.addEventListener('click', () => handleCorrection('film', 'Film Emulation'));
+        if (optResetBtn) optResetBtn.addEventListener('click', () => handleCorrection('reset', 'Reset Corrections'));
+        
+        // Watch for image upload to update original data reference
+        const imageInput = document.getElementById('imageInput');
+        if (imageInput) {
+            imageInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    loadImageFromSource(file, 'Uploaded image');
+                }
+            });
+        }
+        
+  // Grid functionality
+  function drawGrid() {
+    const gridCanvas = document.getElementById('gridCanvas');
+    const sourceCanvas = document.getElementById('sourceCanvas');
+    if (!gridCanvas || !sourceCanvas) return;
+    
+    const ctx = gridCanvas.getContext('2d');
+    
+    // Get the computed style to understand how the image is being scaled
+    const sourceComputedStyle = window.getComputedStyle(sourceCanvas);
+    const gridComputedStyle = window.getComputedStyle(gridCanvas);
+    
+    // Get the actual display dimensions
+    const displayWidth = sourceCanvas.clientWidth;
+    const displayHeight = sourceCanvas.clientHeight;
+    
+    // Get the actual pixel dimensions
+    const pixelWidth = sourceCanvas.width;
+    const pixelHeight = sourceCanvas.height;
+    
+    // Calculate the scale factor
+    const widthScale = displayWidth / pixelWidth;
+    const heightScale = displayHeight / pixelHeight;
+    
+    // Set grid canvas to match exactly what the user sees
+    gridCanvas.width = displayWidth;
+    gridCanvas.height = displayHeight;
+    gridCanvas.style.width = `${displayWidth}px`;
+    gridCanvas.style.height = `${displayHeight}px`;
+    
+    ctx.clearRect(0, 0, displayWidth, displayHeight);
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+    ctx.lineWidth = 1;
+    ctx.zIndex = 10;
+    
+    // Use consistent grid spacing based on display size
+    const gridSize = Math.max(30, Math.min(displayWidth, displayHeight) / 15);
+    
+    // Draw vertical lines
+    for (let x = gridSize; x < displayWidth; x += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, displayHeight);
+        ctx.stroke();
+    }
+    
+    // Draw horizontal lines
+    for (let y = gridSize; y < displayHeight; y += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(displayWidth, y);
+        ctx.stroke();
+    }
+}
+        
+        // Toggle grid button
+        // Toggle grid button - FIXED (starts hidden)
+const toggleGridBtn = document.getElementById('toggleGridBtn');
+if (toggleGridBtn) {
+    // Set initial state - grid starts HIDDEN
+    // toggleGridBtn.classList.add('active');  // REMOVE or COMMENT OUT this line
+    
+    const gridCanvas = document.getElementById('gridCanvas');
+    if (gridCanvas) {
+        gridCanvas.style.display = 'none';  // Ensure grid is hidden initially
+    }
+    
+    toggleGridBtn.addEventListener('click', function() {
+        const gridCanvas = document.getElementById('gridCanvas');
+        if (!gridCanvas) return;
+        
+        if (gridCanvas.style.display === 'none') {
+            // Show grid
+            gridCanvas.style.display = 'block';
+            this.classList.add('active');
+            drawGrid(); // Redraw when showing
+        } else {
+            // Hide grid
+            gridCanvas.style.display = 'none';
+            this.classList.remove('active');
+        }
     });
-  </script>
+}
+        
+        // Expose for other scripts if needed
+        window.correctionHelpers = { updateOriginalData, resetToOriginal, drawGrid };
+    })();
+</script>
   <script type="module" src="script.js"></script>
-        <script type="module" src="./seo-loader.js"></script>
-
+  <script type="module" src="./seo-loader.js"></script>
 </body>
 </html>

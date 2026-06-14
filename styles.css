@@ -331,3 +331,107 @@ footer {
     text-transform: none;
     text-wrap: contain;
 }
+
+
+
+
+
+
+/* dropdown styling (replaces button but now with canvas integration) */
+    .dropdown-container {
+      position: relative;
+      width: 100%;
+      margin: 0.8rem 0 1.2rem 0;
+    }
+
+    .dropdown-button {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      background: white;
+      border: 1px solid #cbdde9;
+      border-radius: 60px;
+      padding: 0.75rem 1.2rem;
+      width: 100%;
+      font-size: 0.95rem;
+      font-weight: 570;
+      font-family: inherit;
+      color: #1e3a5f;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+    }
+
+    .dropdown-button:hover {
+      background-color: #fafdff;
+      border-color: #7faddb;
+      box-shadow: 0 8px 18px -10px rgba(0, 80, 120, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .dropdown-left {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    /* NEW SVG (magic wand + correction hybrid) */
+    .new-icon-svg {
+      width: 1.35rem;
+      height: 1.35rem;
+      display: block;
+      filter: drop-shadow(0 1px 1px rgba(0,0,0,0.1));
+    }
+
+    .chevron-icon {
+      width: 1rem;
+      height: 1rem;
+      transition: transform 0.2s;
+      fill: #5c7f9c;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: calc(100% + 0.5rem);
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      border-radius: 1.25rem;
+      box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.2);
+      list-style: none;
+      padding: 0.5rem 0;
+      margin: 0;
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
+      border: 1px solid #eef2f8;
+    }
+
+    .dropdown-menu.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .dropdown-menu button {
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: none;
+      padding: 0.7rem 1.2rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #1f3b4c;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      transition: background 0.15s;
+    }
+
+    .dropdown-menu button:hover {
+      background-color: #eef4fc;
+    }
